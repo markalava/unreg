@@ -1,0 +1,14 @@
+Package: unreg
+Type: Package
+Title: World Regions, Countries, and Codes
+Version: 0.0.0.9000
+Author: Mark Wheldon
+Maintainer: Mark Wheldon <wheldon@un.org>
+Description: Utilities for accessing country ISO codes and UN geographic
+    regions.
+License: file LICENCE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    wpp2019
+RoxygenNote: 6.1.1
