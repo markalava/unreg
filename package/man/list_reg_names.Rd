@@ -8,7 +8,7 @@ list_reg_names(level = c("1", "2"), family = c("M49", "SDG", "WB",
   "Dev"))
 }
 \arguments{
-\item{level}{Level of classification. Higher levels are nested in
+\item{level}{Level of region. Higher levels are nested in
 lower levels. E.g., \dQuote{Africa} is level \dQuote{1},
 \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
 character if supplied as numeric.}

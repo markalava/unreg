@@ -18,10 +18,23 @@
 
 library(git2r)
 library(devtools)
-example(source, echo = FALSE)
 
 ###-----------------------------------------------------------------------------
 ### * Functions
+
+divider <- function(x) {
+    cat("\n\n\n********************************************************************************\n** ", x,
+        "\n********************************************************************************\n\n")
+}
+
+## From 'example("source", package = "base")
+sourceDir <- function(path, trace = TRUE, ...) {
+    for (nm in list.files(path, pattern = "[.][RrSsQq]$")) {
+        if(trace) cat(nm,":")
+        source(file.path(path, nm), ...)
+        if(trace) cat("\n")
+    }
+}
 
 ###-----------------------------------------------------------------------------
 ### ** Github stuff
@@ -42,6 +55,8 @@ write_sha1_DESC <- function(pkg_dir, git_dir) {
 
     ## Write DES
     writeLines(DESC_lines, con = DESC_con)
+
+    close(DESC_con)
 }
 
 clean_sha1_DESC <- function(pkg_dir) {
@@ -55,18 +70,26 @@ clean_sha1_DESC <- function(pkg_dir) {
 
     ## Write DES
     writeLines(DESC_lines, con = DESC_con)
+
+    close(DESC_con)
 }
 
 ###-----------------------------------------------------------------------------
 ### * Test and Install
 
 ### Make sysdata.rda
+divider("MAKING SYSDATA")
 sourceDir("data-raw")
 
+### Document
+devtools::document()
+
 ### Do all tests
-devtools::test(reporter = c("summary", "stop"))
+divider("RUNNING TESTS")
+devtools::test(reporter = c("summary", "fail"))
 
 ### Install
+divider("INSTALLING")
 write_sha1_DESC(pkg_dir = ".", git_dir = "..")
 devtools::install()
 clean_sha1_DESC(pkg_dir = ".")

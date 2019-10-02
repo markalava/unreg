@@ -1,4 +1,4 @@
 library(testthat)
-library(unreg)
+suppressPackageStartupMessages(library(unreg))
 
 test_check("unreg")

@@ -68,7 +68,7 @@ name <- function(code) {
 ##'     \code{is.character(x)}.
 ##' @param family Family to which the region referenced by \code{code}
 ##'     belongs.
-##' @param level Level of classification. Higher levels are nested in
+##' @param level Level of region. Higher levels are nested in
 ##'     lower levels. E.g., \dQuote{Africa} is level \dQuote{1},
 ##'     \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
 ##'     character if supplied as numeric.

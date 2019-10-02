@@ -16,8 +16,17 @@ make_loc4_sdg_df <- function(df = unloc_df) {
 }
 
 
-M49_table <- function(codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
+M49_table <- function(codes = TRUE, names = TRUE,
+                      level = c("1", "2"),
+                      stringsAsFactors = FALSE) {
+
     if(sum(codes, names) < 1) stop("Nothing to return.")
+
+    level <- as.character(level)
+    level <- match.arg(level, several.ok = TRUE)
+    l1 <- "1" %in% level
+    l2 <- "2" %in% level
+
     loc4 <- unloc_df[unloc_df$location_type == 4,]
     df <- data.frame(code = loc4$country_code,
                      name = loc4$name,
@@ -32,8 +41,16 @@ M49_table <- function(codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
     }
 
 
-SDG_table <- function(codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
+SDG_table <- function(codes = TRUE, names = TRUE,
+                      level = c("1", "2"),
+                      stringsAsFactors = FALSE) {
+
     if(sum(codes, names) < 1) stop("Nothing to return.")
+
+    level <- as.character(level)
+    level <- match.arg(level, several.ok = TRUE)
+    l1 <- "1" %in% level
+    l2 <- "2" %in% level
 
     loc4_sdg <- make_loc4_sdg_df()
 
@@ -45,18 +62,16 @@ SDG_table <- function(codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
                      SDG_reg_2_name = loc4_sdg$reg_name,
                      stringsAsFactors = stringsAsFactors
                      )
-    ## !!!!!!!!!!!!!!!!!!!!!! HERE HERE HERE HERE
     for(j in seq_along(internal_sdg_reg_L1_ag_cols)) {
-        df$reg_1_code[loc4_sdg[, internal_sdg_reg_L1_ag_cols[j]]] <-
+        df$SDG_reg_1_code[loc4_sdg[, internal_sdg_reg_L1_ag_cols[j]]] <-
             internal_sdg_reg_L1_country_codes[j]
     }
 
     if(!names) return(df[,c(1, 3, 5)])
     else {
-        browser()
         if(stringsAsFactors)
-            df$reg_1_name <- factor(name(df$reg_1_code))
-        else df$reg_1_name <- as.character(name(df$reg_1_code))
+            df$SDG_reg_1_name <- factor(name(df$SDG_reg_1_code))
+        else df$SDG_reg_1_name <- as.character(name(df$SDG_reg_1_code))
         }
 
     if(!codes) return(df[,c(2,4,6)])
@@ -64,22 +79,32 @@ SDG_table <- function(codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
 }
 
 
-##' .. title (sentence case, not terminated with a full-stop) ..
+##' Create table of countries and regions
 ##'
-##' .. content for \description{} (no empty lines) ..
+##' Creates a data frame with columns for country names and codes (if
+##' requested) and corresponding regions (as requested).
 ##'
-##' .. content for \details{} ..
-##' @param level
-##' @param family
-##' @param codes
-##' @param names
-##' @param stringsAsFactors
+##' @param level Level of region. Higher levels are nested in lower
+##'     levels. E.g., \dQuote{Africa} is level \dQuote{1},
+##'     \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
+##'     character if supplied as numeric. The level \sQuote{""}
+##' @param codes Logial. Include country and region codes in the
+##'     result? You must set at least one of \code{codes} and
+##'     \code{names} to \code{TRUE}.
+##' @param names Logical. Include country and region names in the
+##'     result?
+##' @param stringsAsFactors Passed to \code{\link{data.frame}}. Note
+##'     the default is \code{FALSE}.
+##' @inheritParams reg_code
 ##' @return
 ##' @author Mark Wheldon
+##' @family Table functions
 ##' @export
-loc_table <- function(level = c("1", "2"),
+reg_table <- function(level = c("", "1", "2"),
                       family = c("M49", "SDG", "WB", "Dev"),
                       codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
+
+    if(sum(codes, names) < 1) stop("Nothing to return. You must set at least one of 'codes' and 'names' to 'TRUE'.")
 
     level <- as.character(level)
     level <- match.arg(level, several.ok = TRUE)
@@ -90,23 +115,64 @@ loc_table <- function(level = c("1", "2"),
 
     df <- data.frame(code = list_country_codes(),
                      stringsAsFactors = stringsAsFactors)
-    if(names) df$name <- name(df$code)
 
     if("M49" %in% family) {
         out <- M49_table(codes = TRUE, names = names,
                          stringsAsFactors = stringsAsFactors)
-        df <- merge(df[, !colnames(df)=="names"],
-                    out, by = "code", all.x = TRUE)
+        df <- merge(df,
+                    out[, !colnames(out)=="name", drop = FALSE]
+                   ,by = "code", all.x = TRUE)
     }
 
     if("SDG" %in% family) {
         out <- SDG_table(codes = TRUE, names = names,
                          stringsAsFactors = stringsAsFactors)
-        df <- merge(df[, !colnames(df)=="names"],
-                    out, by = "code", all.x = TRUE)
+        df <- merge(df,
+                    out[, !colnames(out)=="name", drop = FALSE],
+                    by = "code", all.x = TRUE)
     }
 
-    if(any(family %in% c("WB", "Dev"))) message("'family' types 'WB' and 'Dev' not yet implemented.")
+    if(any(family %in% c("WB", "Dev"))) message("family types 'WB' and 'Dev' not yet implemented.")
+
+    if(names) df$name <- name(df$code)
 
     return(df)
 }
+
+
+##' Create table with just countries and their codes
+##'
+##' Creates a table with country codes and their names. Optionally,
+##' just a table with names or codes. This function returns a data
+##' frame. If only one of \code{codes} and \code{names} is \code{TRUE}
+##' it will be a data frame with one column. If you want a vector of
+##' names or codes see \code{\link{code}} and \code{\link{name}}.
+##'
+##' @param codes
+##' @param names
+##' @param stringsAsFactors
+##' @return A data frame with country codes, names, or both. Always a
+##'     data frame, even if one of \code{codes} or \code{names} is
+##'     \code{FALSE}.
+##' @author Mark Wheldon
+##' @family Table functions
+##' @export
+country_table <- function(codes = TRUE, names = TRUE, stringsAsFactors = FALSE) {
+
+    if(sum(codes, names) < 1) stop("Nothing to return. You must set at least one of 'codes' and 'names' to 'TRUE'.")
+
+    if(!codes) {
+        df <- unloc_df[unloc_df$location_type == 4, "name", drop = FALSE]
+        if(stringsAsFactors) df$name <- factor(df$name)
+        return(df)
+    } else if(!names) {
+          df <- unloc_df[unloc_df$location_type == 4, "country_code", drop = FALSE]
+          colnames(df) <- "code"
+          return(df)
+      } else {
+          df <- unloc_df[unloc_df$location_type == 4, c("name", "country_code")]
+          colnames(df) <- c("name", "code")
+          return(df)
+      }
+    }
+
