@@ -8,13 +8,48 @@
 ##' Returns the ISO code(s) associated with \code{name}. If a region
 ##' is given, all codes associated will be returned in a vector.
 ##'
-##' @param name Name of country or region (case insensitive).
+##' Names of regions are not unique, e.g., \dQuote{Latin America and
+##' the Caribbean} is a region in the \dQuote{M49} and \dQuote{SDG}
+##' families and, as a restult, has two codes. Ambiguities in such
+##' cases are resolved with \code{family}. If \code{family} is not
+##' supplied a warning is given and \dQuote{M49} is assumed.
+##'
+##' @param name Name(s) of country(ies) or region(s) for which codes
+##'     are desired (case insensitive). Abbreviations may be used.
+##' @param family Family of the region given by \code{name}. See
+##'     \sQuote{Details}.
 ##' @return A vector the same length as \code{code} containing the ISO
 ##'     code(s) as numeric.
 ##' @author Mark Wheldon
 ##' @family translator functions
+##' @examples
+##' ## Countries
+##' code(c("France", "france", "FRANCE", "spain"))
+##'
+##' ## Regions
+##' code(c("World", "Africa"))
+##'
+##' ## Accidentally provide code as character
+##' code(c("France", "250"))
+##'
+##' ## Regions with more than one code
+##' \dontrun{
+##' code("Latin America and the Caribbean")
+##' }
+##'
+##' ## Without warning (using abbreviation)
+##' code("lac", family = "M49")
+##' code("lac", family = "SDG")
+##'
 ##' @export
 code <- function(name, family = c("M49", "SDG")) {
+
+    num_as_char <- suppressWarnings(!is.na(as.numeric(name)))
+    if(any(num_as_char)) {
+        warning("It looks like you supplied some codes as character; treating them as numeric codes.")
+        name[num_as_char] <- name(as.numeric(name[num_as_char]))
+    }
+
     name <- tolower(name_subs(name))
     miss_fam <- missing(family) || is.null(family)
     family <- match.arg(family)
@@ -48,6 +83,14 @@ code <- function(name, family = c("M49", "SDG")) {
 ##'     name(s) as character.
 ##' @author Mark Wheldon
 ##' @family translator functions
+##' @examples
+##'
+##' ## Countries
+##' name(c(250, 4))
+##'
+##' ## Regions
+##' name(900)
+##'
 ##' @export
 name <- function(code) {
     code <- as.numeric(code)
@@ -76,6 +119,18 @@ name <- function(code) {
 ##'     code(s) as numeric.
 ##' @author Mark Wheldon
 ##' @family translator functions
+##'
+##' @examples
+##'
+##' ## Default family is "M49"
+##' reg_code(250)
+##' reg_code(c("France", "FRANCE", "spAIn"))
+##'
+##' reg_code(250, family = "SDG")
+##'
+##' ## Level can be supplied as numeric for convenience
+##' reg_code(250, 2, family = "SDG")
+##'
 ##' @export
 reg_code <- function(x, level = c("1","2"),
                      family = c("M49", "SDG", "WB", "Dev")) {
@@ -132,6 +187,17 @@ reg_code <- function(x, level = c("1","2"),
 ##' @return Region name as character
 ##' @author Mark Wheldon
 ##' @family translator functions
+##'
+##' @examples
+##'
+##' ## Default family is "M49"
+##' reg_name(250)
+##'
+##' reg_name(250, family = "SDG")
+##'
+##' ## Level can be supplied as numeric for convenience
+##' reg_name("France", 2, family = "SDG")
+##'
 ##' @export
 reg_name <- function(x, level = c("1","2"),
                    family = c("M49", "SDG", "WB", "Dev")) {

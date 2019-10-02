@@ -17,6 +17,15 @@ A vector the same length as \code{code} containing the
 Returns the name associated with \code{code}. If a region
 is given, all names associated will be returned in a vector.
 }
+\examples{
+
+## Countries
+name(c(250, 4))
+
+## Regions
+name(900)
+
+}
 \seealso{
 Other translator functions: \code{\link{code}},
   \code{\link{country_codes}}, \code{\link{country_names}},

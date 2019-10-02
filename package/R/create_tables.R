@@ -4,8 +4,8 @@
 ###
 
 
-## Used by several functions.
-## Subsets 'UNlocations'  to just countries and columns for SDG regions.
+### Used by several functions.
+### Subsets 'UNlocations'  to just countries and columns for SDG regions.
 make_loc4_sdg_df <- function(df = unloc_df) {
     out <- df[df$location_type == 4,
               c("name", "country_code", "reg_code", "reg_name",
@@ -16,12 +16,14 @@ make_loc4_sdg_df <- function(df = unloc_df) {
 }
 
 
+### M49 table backend
 M49_table <- function(codes = TRUE, names = TRUE,
                       level = c("1", "2"),
                       stringsAsFactors = FALSE) {
 
     if(sum(codes, names) < 1) stop("Nothing to return.")
 
+    if(is.null(level) || identical(level, "")) level <- 1:2
     level <- as.character(level)
     level <- match.arg(level, several.ok = TRUE)
     l1 <- "1" %in% level
@@ -41,12 +43,14 @@ M49_table <- function(codes = TRUE, names = TRUE,
     }
 
 
+### SDG table backend
 SDG_table <- function(codes = TRUE, names = TRUE,
                       level = c("1", "2"),
                       stringsAsFactors = FALSE) {
 
     if(sum(codes, names) < 1) stop("Nothing to return.")
 
+    if(is.null(level) || identical(level, "")) level <- 1:2
     level <- as.character(level)
     level <- match.arg(level, several.ok = TRUE)
     l1 <- "1" %in% level
@@ -56,25 +60,41 @@ SDG_table <- function(codes = TRUE, names = TRUE,
 
     df <- data.frame(code = loc4_sdg$country_code,
                      name = loc4_sdg$name,
-                     SDG_reg_1_code = NA,
-                     SDG_reg_1_name = NA,
-                     SDG_reg_2_code = loc4_sdg$reg_code,
-                     SDG_reg_2_name = loc4_sdg$reg_name,
-                     stringsAsFactors = stringsAsFactors
-                     )
-    for(j in seq_along(internal_sdg_reg_L1_ag_cols)) {
-        df$SDG_reg_1_code[loc4_sdg[, internal_sdg_reg_L1_ag_cols[j]]] <-
-            internal_sdg_reg_L1_country_codes[j]
+                     stringsAsFactors = stringsAsFactors)
+
+    if(l1) {
+        df <- data.frame(df,
+                            SDG_reg_1_code = NA,
+                            SDG_reg_1_name = NA,
+                            stringsAsFactors = stringsAsFactors
+                         )
+        }
+    if(l2) {
+        df <- data.frame(df,
+                         SDG_reg_2_code = loc4_sdg$reg_code,
+                         SDG_reg_2_name = loc4_sdg$reg_name,
+                         stringsAsFactors = stringsAsFactors
+                         )
+        for(j in seq_along(internal_sdg_reg_L1_ag_cols)) {
+            df$SDG_reg_1_code[loc4_sdg[, internal_sdg_reg_L1_ag_cols[j]]] <-
+                internal_sdg_reg_L1_country_codes[j]
+        }
     }
 
-    if(!names) return(df[,c(1, 3, 5)])
+    if(!names) return(df[,seq(from = 1, to = ncol(df), by = 2)])
     else {
-        if(stringsAsFactors)
-            df$SDG_reg_1_name <- factor(name(df$SDG_reg_1_code))
-        else df$SDG_reg_1_name <- as.character(name(df$SDG_reg_1_code))
+        if(stringsAsFactors) {
+            for(j in seq(from = 2, to = ncol(df), by = 2)) {
+                df[,j] <- factor(df[,j])
+            }
+        } else {
+            for(j in seq(from = 2, to = ncol(df), by = 2)) {
+                df[,j] <- as.character(df[,j])
+            }
         }
+    }
 
-    if(!codes) return(df[,c(2,4,6)])
+    if(!codes) return(df[,seq(from = 2, to = ncol(df), by = 2)])
     else return(df)
 }
 
@@ -87,7 +107,8 @@ SDG_table <- function(codes = TRUE, names = TRUE,
 ##' @param level Level of region. Higher levels are nested in lower
 ##'     levels. E.g., \dQuote{Africa} is level \dQuote{1},
 ##'     \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
-##'     character if supplied as numeric. The level \sQuote{""}
+##'     character if supplied as numeric. The \sQuote{""}, or
+##'     \code{NULL}, can be given to request all levels.
 ##' @param codes Logial. Include country and region codes in the
 ##'     result? You must set at least one of \code{codes} and
 ##'     \code{names} to \code{TRUE}.
@@ -99,6 +120,10 @@ SDG_table <- function(codes = TRUE, names = TRUE,
 ##' @return
 ##' @author Mark Wheldon
 ##' @family Table functions
+##'
+##' @examples
+##' reg_table(level = 1, family = M49)
+##'
 ##' @export
 reg_table <- function(level = c("", "1", "2"),
                       family = c("M49", "SDG", "WB", "Dev"),
@@ -106,10 +131,9 @@ reg_table <- function(level = c("", "1", "2"),
 
     if(sum(codes, names) < 1) stop("Nothing to return. You must set at least one of 'codes' and 'names' to 'TRUE'.")
 
+    if(is.null(level) || identical(level, "")) level <- 1:2
     level <- as.character(level)
     level <- match.arg(level, several.ok = TRUE)
-    l1 <- "1" %in% level
-    l2 <- "2" %in% level
 
     family <- match.arg(family, several.ok = TRUE)
 
@@ -117,7 +141,7 @@ reg_table <- function(level = c("", "1", "2"),
                      stringsAsFactors = stringsAsFactors)
 
     if("M49" %in% family) {
-        out <- M49_table(codes = TRUE, names = names,
+        out <- M49_table(codes = TRUE, names = names, level = level,
                          stringsAsFactors = stringsAsFactors)
         df <- merge(df,
                     out[, !colnames(out)=="name", drop = FALSE]
@@ -125,7 +149,7 @@ reg_table <- function(level = c("", "1", "2"),
     }
 
     if("SDG" %in% family) {
-        out <- SDG_table(codes = TRUE, names = names,
+        out <- SDG_table(codes = TRUE, names = names, level = level,
                          stringsAsFactors = stringsAsFactors)
         df <- merge(df,
                     out[, !colnames(out)=="name", drop = FALSE],

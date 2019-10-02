@@ -7,7 +7,11 @@
 code(name, family = c("M49", "SDG"))
 }
 \arguments{
-\item{name}{Name of country or region (case insensitive).}
+\item{name}{Name(s) of country(ies) or region(s) for which codes
+are desired (case insensitive). Abbreviations may be used.}
+
+\item{family}{Family of the region given by \code{name}. See
+\sQuote{Details}.}
 }
 \value{
 A vector the same length as \code{code} containing the ISO
@@ -16,6 +20,33 @@ A vector the same length as \code{code} containing the ISO
 \description{
 Returns the ISO code(s) associated with \code{name}. If a region
 is given, all codes associated will be returned in a vector.
+}
+\details{
+Names of regions are not unique, e.g., \dQuote{Latin America and
+the Caribbean} is a region in the \dQuote{M49} and \dQuote{SDG}
+families and, as a restult, has two codes. Ambiguities in such
+cases are resolved with \code{family}. If \code{family} is not
+supplied a warning is given and \dQuote{M49} is assumed.
+}
+\examples{
+## Countries
+code(c("France", "france", "FRANCE", "spain"))
+
+## Regions
+code(c("World", "Africa"))
+
+## Accidentally provide code as character
+code(c("France", "250"))
+
+## Regions with more than one code
+\dontrun{
+code("Latin America and the Caribbean")
+}
+
+## Without warning (using abbreviation)
+code("lac", family = "M49")
+code("lac", family = "SDG")
+
 }
 \seealso{
 Other translator functions: \code{\link{country_codes}},

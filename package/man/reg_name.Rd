@@ -28,6 +28,17 @@ Returns the region name associated with a given country code.
 \details{
 If a region name is supplied it will just be returned.
 }
+\examples{
+
+## Default family is "M49"
+reg_name(250)
+
+reg_name(250, family = "SDG")
+
+## Level can be supplied as numeric for convenience
+reg_name("France", 2, family = "SDG")
+
+}
 \seealso{
 Other translator functions: \code{\link{code}},
   \code{\link{country_codes}}, \code{\link{country_names}},

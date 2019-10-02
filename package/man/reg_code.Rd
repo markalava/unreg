@@ -29,6 +29,18 @@ Returns the region code associated with a given country code.
 \details{
 If a region code is supplied it will just be returned.
 }
+\examples{
+
+## Default family is "M49"
+reg_code(250)
+reg_code(c("France", "FRANCE", "spAIn"))
+
+reg_code(250, family = "SDG")
+
+## Level can be supplied as numeric for convenience
+reg_code(250, 2, family = "SDG")
+
+}
 \seealso{
 Other translator functions: \code{\link{code}},
   \code{\link{country_codes}}, \code{\link{country_names}},
