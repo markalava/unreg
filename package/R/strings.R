@@ -16,15 +16,22 @@
 ##     }, USE.NAMES = !is.null(names(s)))
 ## }
 
-from_to <- function(x, from, to) {
+from_to_in <- function(x, from, to) {
     for(i in seq_along(from)) {
         x[x %in% from[i]] <- to[i]
+    }
+    x
+}
+
+from_to_grep <- function(x, from, to, ...) {
+    for(i in seq_along(from)) {
+        x[grep(from[i], x, ...)] <- to[i]
     }
     x
     }
 
 capitalize_areas <- function(x) {
-    from_to(x, from = c("WORLD", "AFRICA", "ASIA", "EUROPE",
+    from_to_in(x, from = c("WORLD", "AFRICA", "ASIA", "EUROPE",
                "LATIN AMERICA AND THE CARIBBEAN",
                "NORTHERN AMERICA", "OCEANIA"),
             to = c("World", "Africa", "Asia", "Europe",
@@ -34,7 +41,7 @@ capitalize_areas <- function(x) {
 
 name_subs <- function(x) {
     x <- tolower(x)
-    x[grep("lac", x)] <- "Latin America and the Caribbean"
-    return(x)
+    from_to_in(x, from = "lac",
+               to = "Latin America and the Caribbean")
     }
 

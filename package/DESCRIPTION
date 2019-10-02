@@ -13,3 +13,7 @@ Imports:
     wpp2019
 RoxygenNote: 6.1.1
 GitHubSHA1LastCommit: -
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
