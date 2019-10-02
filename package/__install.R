@@ -26,12 +26,12 @@ example(source, echo = FALSE)
 ###-----------------------------------------------------------------------------
 ### ** Github stuff
 
-write_sha1_DESC <- function(src_dir, git_dir) {
+write_sha1_DESC <- function(pkg_dir, git_dir) {
     ## Create new line with SHA1
     new_sha1_line <- paste0("GitHubSHA1LastCommit: ", git2r::sha(git2r::last_commit(git_dir)))
 
     ## Read DESC file as lines
-    DESC_con <- file(file.path(src_dir, "../DESCRIPTION"))
+    DESC_con <- file(file.path(pkg_dir, "DESCRIPTION"))
     DESC_lines <- readLines(DESC_con)
 
     ## Is there already a 'GitHubSHA1LastCommit:' line? If so, replace it. If
@@ -44,9 +44,9 @@ write_sha1_DESC <- function(src_dir, git_dir) {
     writeLines(DESC_lines, con = DESC_con)
 }
 
-clean_sha1_DESC <- function(src_dir) {
+clean_sha1_DESC <- function(pkg_dir) {
     ## Read DESC file as lines
-    DESC_con <- file(file.path(src_dir, "../DESCRIPTION"))
+    DESC_con <- file(file.path(pkg_dir, "DESCRIPTION"))
     DESC_lines <- readLines(DESC_con)
 
     ## Is there already a 'GitHubSHA1LastCommit:' line? If so, replace it with 'GitHubSHA1LastCommit: -'.
@@ -67,7 +67,9 @@ sourceDir("data-raw")
 devtools::test(reporter = c("summary", "stop"))
 
 ### Install
+write_sha1_DESC(pkg_dir = ".", git_dir = "..")
 devtools::install()
+clean_sha1_DESC(pkg_dir = ".")
 
 ## or.. if needed
 ## devtools::install(build_vignettes = TRUE)
