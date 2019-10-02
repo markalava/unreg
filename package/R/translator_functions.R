@@ -1,0 +1,196 @@
+###
+### Access ISO codes, names, etc
+###
+
+
+##' Country or region code
+##'
+##' Returns the ISO code(s) associated with \code{name}. If a region
+##' is given, all codes associated will be returned in a vector.
+##'
+##' @param name Name of country or region (case insensitive).
+##' @return A vector the same length as \code{code} containing the ISO
+##'     code(s) as numeric.
+##' @author Mark Wheldon
+##' @family translator functions
+##' @export
+code <- function(name, family = c("M49", "SDG")) {
+    name <- tolower(name_subs(name))
+    miss_fam <- missing(family) || is.null(family)
+    family <- match.arg(family)
+
+    rows <- lapply(name, function(z) {
+        which(z == tolower(unloc_df$name), useNames = FALSE)})
+    dup_codes <- lapply(rows, "length") > 1
+
+    if(any(dup_codes)) {
+        if(miss_fam) warning("A 'name' has multiple 'codes' and 'family' was not specified. Returning the code from the '", family, "' family (the name was probably 'Europe', 'Latin America and the Caribbean', or 'Nothern America').")
+        for(i in which(dup_codes)) {
+            if(identical(family, "M49")) {
+                rows[[i]] <- rows[[i]][which(unloc_df[rows[[i]],]$location_type == 2)]
+            } else if(identical(family, "SDG")) {
+                rows[[i]] <- rows[[i]][which(unloc_df[rows[[i]],]$location_type != 2)]
+            }
+        }
+    }
+    rows <- unlist(rows)
+    return(as.numeric(unloc_df[rows, "country_code"]))
+}
+
+
+##' Country or region name
+##'
+##' Returns the name associated with \code{code}. If a region
+##' is given, all names associated will be returned in a vector.
+##'
+##' @param code ISO code for the country or UN code for region.
+##' @return A vector the same length as \code{code} containing the
+##'     name(s) as character.
+##' @author Mark Wheldon
+##' @family translator functions
+##' @export
+name <- function(code) {
+    code <- as.numeric(code)
+    as.character(unloc_df[unlist(sapply(code, function(z) {
+        which(z == unloc_df$country_code, useNames = FALSE)
+    }, USE.NAMES = FALSE)), "name"])
+}
+
+
+##' Region code associated with a country or region
+##'
+##' Returns the region code associated with a given country code.
+##'
+##' If a region code is supplied it will just be returned.
+##'
+##' @param x \emph{Country} identifier. Interpreted as \dQuote{code}
+##'     if \code{is.numeric(x)} and \Quote{name} if
+##'     \code{is.character(x)}.
+##' @param family Family to which the region referenced by \code{code}
+##'     belongs.
+##' @param level Level of classification. Higher levels are nested in
+##'     lower levels. E.g., \dQuote{Africa} is level \dQuote{1},
+##'     \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
+##'     character if supplied as numeric.
+##' @return A vector the same length as \code{x} containing the
+##'     code(s) as numeric.
+##' @author Mark Wheldon
+##' @family translator functions
+##' @export
+reg_code <- function(x, level = c("1","2"),
+                     family = c("M49", "SDG", "WB", "Dev")) {
+
+    family <- match.arg(family)
+
+    if(is.numeric(x)) {
+        code <- x
+    } else if(is.character(x)) {
+        code <- code(x, family = family)
+    }
+
+    level <- as.character(level)
+    level <- match.arg(level)
+
+    if(identical(family, "M49")) {
+        if(identical(level, "1")) {
+            out <- unloc_df[unlist(sapply(code, function(z) {
+                which(z == unloc_df$country_code, useNames = FALSE)
+                }, USE.NAMES = FALSE)), "area_code"]
+            return(as.numeric(out))
+        } else if(identical(level, "2")) {
+            out <- unloc_df[unlist(sapply(code, function(z) {
+                which(z == unloc_df$country_code, useNames = FALSE)
+                }, USE.NAMES = FALSE)), "reg_code"]
+            return(as.numeric(out))
+        }
+    } else if(identical(family, "SDG")) {
+        if(identical(level, "1")) {
+            loc4_sdg <- make_loc4_sdg_df()
+            loc4_sdg <- loc4_sdg[unlist(sapply(code, function(z) {
+                which(z == loc4_sdg$country_code, useNames = FALSE)
+                }, USE.NAMES = FALSE)),,drop = FALSE]
+            sdg_reg_1_code <- rep(NA, nrow(loc4_sdg))
+            for(i in seq_along(sdg_reg_1_code)) {
+                idx <- which(as.logical(loc4_sdg[i, internal_sdg_reg_L1_ag_cols, drop = TRUE]), useNames = FALSE)
+                sdg_reg_1_code[i] <- internal_sdg_reg_L1_country_codes[idx]
+            }
+            return(sdg_reg_1_code)
+        } else if(identical(level, "2")) {
+            return(reg_code(x = x, level = "2", family = "M49"))
+        }
+    } else stop("family = '", family, "' not implemented.")
+}
+
+
+##' Region name associated with a country or region
+##'
+##' Returns the region name associated with a given country code.
+##'
+##' If a region name is supplied it will just be returned.
+##'
+##' @inheritParams reg_code
+##' @return Region name as character
+##' @author Mark Wheldon
+##' @family translator functions
+##' @export
+reg_name <- function(x, level = c("1","2"),
+                   family = c("M49", "SDG", "WB", "Dev")) {
+    name(reg_code(x, family = family, level = level))
+}
+
+
+##' Country codes associated with a region
+##'
+##' Returns codes of all countries in the region
+##'
+##' @inheritParams reg_code
+##' @return Country codes as numeric.
+##' @author Mark Wheldon
+##' @family translator functions
+##' @export
+country_codes <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
+
+    if(length(x) > 1) {
+        names(x) <- x
+        out <- lapply(x, "country_codes", family = family)
+        return(out)
+    }
+
+    family <- match.arg(family)
+
+    if(is.numeric(x)) {
+        code <- x
+    } else if(is.character(x)) {
+        code <- code(x, family = family)
+    }
+
+    if(identical(family, "M49")) {
+        unloc_df_reg <- unloc_df[unloc_df$location_type %in% 2:3,]
+        unloc_df_country <- unloc_df[unloc_df$location_type == 4,]
+        if(!(code %in% unloc_df_reg$country_code)) stop("'x' is not an M49 region code.")
+        level <-
+            unloc_df_reg[unloc_df_reg$country_code == code, "location_type"]
+        if(identical(as.character(level), "2")) {
+            return(unloc_df_country[unloc_df_country$area_code %in% code,
+                                "country_code"])
+        } else if(identical(as.character(level), "3")) {
+            return(unloc_df_country[unloc_df_country$reg_code %in% code,
+                                "region_code"])
+        }
+    } else stop("family = '", family, "' not implemented.")
+}
+
+
+##' Country names associated with a region
+##'
+##' Returns names of all countries in the region
+##'
+##' @inheritParams reg_code
+##' @return Country names as character.
+##' @author Mark Wheldon
+##' @family translator functions
+##' @export
+country_names <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
+    out <- country_codes(x = x, family = family)
+    name(out)
+}

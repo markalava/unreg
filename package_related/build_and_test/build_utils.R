@@ -43,7 +43,17 @@ build_install <- function(src_dir, git_dir) {
 }
 
 ###-----------------------------------------------------------------------------
-### * Github stuff
+### * Package Data
+
+make_data <- function(file) {
+    source(file)
+    }
+
+###-----------------------------------------------------------------------------
+### * Versioning
+
+###-----------------------------------------------------------------------------
+### ** Github stuff
 
 write_sha1_DESC <- function(src_dir, git_dir) {
     ## Create new line with SHA1
