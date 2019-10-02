@@ -26,8 +26,8 @@ clean_out <- function() {
     }
 
 build_install <- function(src_dir, git_dir) {
+
     clean_out()            # loads devtools
-    devtools::document(pkg = src_dir)
     detach("package:unreg")      #<- remove from search to install
     write_sha1_DESC(src_dir = src_dir, git_dir = git_dir)
     pkg_archive <-
