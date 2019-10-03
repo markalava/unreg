@@ -44,6 +44,14 @@
 ##' @export
 code <- function(name, family = c("M49", "SDG")) {
 
+    na.name <- is.na(name)
+    if(any(na.name)) {
+        out <- numeric(length(name))
+        out[na.name] <- NA
+        out[!na.name] <- code(name[!na.name], family = family)
+        return(out)
+    }
+
     num_as_char <- suppressWarnings(!is.na(as.numeric(name)))
     if(any(num_as_char)) {
         warning("It looks like you supplied some codes as character; treating them as numeric codes.")
@@ -94,9 +102,16 @@ code <- function(name, family = c("M49", "SDG")) {
 ##' @export
 name <- function(code) {
     code <- as.numeric(code)
-    as.character(unloc_df[unlist(sapply(code, function(z) {
-        which(z == unloc_df$country_code, useNames = FALSE)
-    }, USE.NAMES = FALSE)), "name"])
+    vapply(code, function(z) {
+        if(is.na(z)) return(as.character(NA))
+        else {
+            idx <- which(z == unloc_df$country_code,
+                         useNames = FALSE)
+            return(unloc_df[idx, "name"])
+        }
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE)
 }
 
 
@@ -213,6 +228,7 @@ reg_name <- function(x, level = c("1","2"),
 ##' @return Country codes as numeric.
 ##' @author Mark Wheldon
 ##' @family translator functions
+##'
 ##' @export
 country_codes <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
 

@@ -1,6 +1,7 @@
 ## code to prepare `SDG_reg` dataset goes here
 
-## These are the 'country_codes' of the rows containing SDG regions
+###-----------------------------------------------------------------------------
+### * 'country_codes' of the rows containing SDG regions
 
 ## NOTE 1: These are *not* the codes of the countries in the
 ## regions. They are the codes of the sdg regions themselves. In
@@ -48,6 +49,31 @@ internal_sdg_reg_L2_country_codes <-
       918                       #Northern America
       )
 
+internal_sdg_reg_L2_ag_cols <- paste0("agcode_", internal_sdg_reg_L2_country_codes, "000")
+
+###-----------------------------------------------------------------------------
+### * 'country_codes' of the rows containing WB regions
+
+internal_wb_reg_L1_country_codes <-
+    c(1503,                     #high income
+      1517,                     #middle income
+      1500                      #low income
+      )
+
+internal_wb_reg_L1_ag_cols <- paste0("agcode_", internal_wb_reg_L1_country_codes, "000")
+
+internal_wb_reg_L2_country_codes <-
+    c(1502,                     #upper middle income
+      1501                      #lower middle
+      )
+
+internal_wb_reg_L2_ag_cols <- paste0("agcode_", internal_wb_reg_L2_country_codes, "000")
+
+###-----------------------------------------------------------------------------
+### * Execute
+
 usethis::use_data(internal_sdg_reg_L1_country_codes, internal_sdg_reg_L1_ag_cols,
-                  internal_sdg_reg_L2_country_codes,
+                  internal_sdg_reg_L2_country_codes, internal_sdg_reg_L2_ag_cols,
+                  internal_wb_reg_L1_country_codes, internal_wb_reg_L1_ag_cols,
+                  internal_wb_reg_L2_country_codes, internal_wb_reg_L2_ag_cols,
                   internal = TRUE, overwrite = TRUE)

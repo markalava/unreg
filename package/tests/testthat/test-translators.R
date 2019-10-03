@@ -8,4 +8,10 @@ test_that("'code' and 'name' return the right length results", {
 test_that("'code' and 'name' return the right class of results", {
     expect_is(code(c("france", "france", "spain")), "numeric")
     expect_is(name(c(250, 724, 250)), "character")
+
+    expect_true(is.na(code(NA)))
+    expect_true(is.na(code(c("france", NA, "france"))[2]))
+    expect_true(is.na(code(c("lac", NA, "lac"))[2]))
+    expect_true(is.na(name(NA)))
+    expect_true(is.na(name(c(4, NA, 4))[2]))
 })
