@@ -30,13 +30,23 @@ M49_table <- function(codes = TRUE, names = TRUE,
     l2 <- "2" %in% level
 
     loc4 <- unloc_df[unloc_df$location_type == 4,]
+
     df <- data.frame(code = loc4$country_code,
                      name = loc4$name,
+                     stringsAsFactors = stringsAsFactors)
+
+    if(l1) {
+    df <- data.frame(df,
                      M49_reg_1_code = loc4$area_code,
                      M49_reg_1_name = loc4$area_name,
+                     stringsAsFactors = stringsAsFactors)
+    }
+    if(l2) {
+        df <- data.frame(df,
                      M49_reg_2_code = loc4$reg_code,
                      M49_reg_2_name = loc4$reg_name,
                      stringsAsFactors = stringsAsFactors)
+        }
     if(!codes) return(df[,c(2, 4, 6)])
     else if(!names) return(df[,c(1, 3, 5)])
     else return(df)
@@ -65,9 +75,13 @@ SDG_table <- function(codes = TRUE, names = TRUE,
     if(l1) {
         df <- data.frame(df,
                             SDG_reg_1_code = NA,
-                            SDG_reg_1_name = NA,
                             stringsAsFactors = stringsAsFactors
                          )
+        for(j in seq_along(internal_sdg_reg_L1_ag_cols)) {
+            df$SDG_reg_1_code[loc4_sdg[, internal_sdg_reg_L1_ag_cols[j]]] <-
+                internal_sdg_reg_L1_country_codes[j]
+        }
+        df$SDG_reg_1_name <- name(df$SDG_reg_1_code)
         }
     if(l2) {
         df <- data.frame(df,
@@ -75,10 +89,6 @@ SDG_table <- function(codes = TRUE, names = TRUE,
                          SDG_reg_2_name = loc4_sdg$reg_name,
                          stringsAsFactors = stringsAsFactors
                          )
-        for(j in seq_along(internal_sdg_reg_L1_ag_cols)) {
-            df$SDG_reg_1_code[loc4_sdg[, internal_sdg_reg_L1_ag_cols[j]]] <-
-                internal_sdg_reg_L1_country_codes[j]
-        }
     }
 
     if(!names) return(df[,seq(from = 1, to = ncol(df), by = 2)])
@@ -139,26 +149,25 @@ reg_table <- function(level = c("", "1", "2"),
 
     df <- data.frame(code = list_country_codes(),
                      stringsAsFactors = stringsAsFactors)
+    if(names) df$name <- name(df$code)
 
     if("M49" %in% family) {
         out <- M49_table(codes = TRUE, names = names, level = level,
                          stringsAsFactors = stringsAsFactors)
-        df <- merge(df,
-                    out[, !colnames(out)=="name", drop = FALSE]
-                   ,by = "code", all.x = TRUE)
+        out <- out[, !colnames(out)=="name", drop = FALSE]
+        df <- merge(df, out,
+                   by = "code", all.x = TRUE)
     }
 
     if("SDG" %in% family) {
         out <- SDG_table(codes = TRUE, names = names, level = level,
                          stringsAsFactors = stringsAsFactors)
-        df <- merge(df,
-                    out[, !colnames(out)=="name", drop = FALSE],
+        out <- out[, !colnames(out)=="name", drop = FALSE]
+        df <- merge(df, out,
                     by = "code", all.x = TRUE)
     }
 
     if(any(family %in% c("WB", "Dev"))) message("family types 'WB' and 'Dev' not yet implemented.")
-
-    if(names) df$name <- name(df$code)
 
     return(df)
 }

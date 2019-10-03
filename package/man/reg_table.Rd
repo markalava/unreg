@@ -11,7 +11,8 @@ reg_table(level = c("", "1", "2"), family = c("M49", "SDG", "WB",
 \item{level}{Level of region. Higher levels are nested in lower
 levels. E.g., \dQuote{Africa} is level \dQuote{1},
 \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
-character if supplied as numeric. The level \sQuote{""}}
+character if supplied as numeric. The \sQuote{""}, or
+\code{NULL}, can be given to request all levels.}
 
 \item{family}{Family to which the region referenced by \code{code}
 belongs.}
@@ -29,6 +30,10 @@ the default is \code{FALSE}.}
 \description{
 Creates a data frame with columns for country names and codes (if
 requested) and corresponding regions (as requested).
+}
+\examples{
+reg_table(level = 1, family = M49)
+
 }
 \seealso{
 Other Table functions: \code{\link{country_table}}

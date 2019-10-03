@@ -2,7 +2,9 @@
 title: "unreg"
 author: "Mark Wheldon"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+    function(...) rmarkdown::html_vignette(..., css=c(system.file("rmarkdown", "templates", "html_vignette", "resources", "vignette.css", package = "rmarkdown"), "vignette2.css")):
+      toc: true
 bibliography: bibliography.bib
 link-citations: true
 vignette: >
@@ -18,13 +20,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-
+ 
 *unreg* provides convenience functions for working with country and country classification schemes, and their ISO codes [@united_nations_standard_2019]. It is based on the package [@division19_wpp2019], specifically the data set `UNlocations` in that package.
 
 
 # Motivation
 
-Many demographic indicators are presented by country and geographic region. Regions are sets (or aggregates) of countries defined in a particular classification scheme, or 'region family'. Region families in common use are the *M49* [@united_nations_standard_2019] and *World Bank* Income Group families [@bank19_world_bank_count_lendin_group]. Mappings between countries and regions used by the *World Population Prospects* [@united_nations_world_2019] are given in the `UNlocations` data frame in the *wpp2019* package [@division19_wpp2019]. However, this file is quite complicated. In particular, the coding of many regions is done through specially named columns.
+Many demographic indicators are presented by country and geographic region. Regions are sets (or aggregates) of countries defined in a particular classification scheme, or 'region family'. Region families in common use are the *M49* [@united_nations_standard_2019] and *World Bank* Income Group families [@bank19_world_bank_count_lendin_group]. 
+
+Mappings between countries and regions used by the *World Population Prospects* [@united_nations_world_2019] are given in the `UNlocations` data frame in the *wpp2019* package [@division19_wpp2019]. However, this file is quite complicated. In particular, the coding of many regions is done through specially named columns.
 
 ```{r}
 library(wpp2019)
@@ -32,7 +36,7 @@ data(UNlocations)
 UNlocations[1:3,1:8]
 ```
 
-This package has many convenience functions that make working with the country and region names and codes much easier.
+*unreg* provides many convenience functions that make working with the country and region names and codes much easier.
 
 
 # Region Families
@@ -126,11 +130,11 @@ unreg::reg_code(c("France", "spAIn"))
 
 unreg::reg_code(250, family = "SDG")
 
-#### Level can be supplied as numeric for convenience
+#### Default level is 1
+#### Give the level to get specific level of region (can be supplied as numeric for convenience)
 unreg::reg_code(250, 2, family = "SDG")
 
 #### If you want the name, instead of the code, use 'unreg::reg_name'
-#### Default is level 1
 unreg::reg_name("france", family = "SDG")
 unreg::reg_name(250, 2, family = "SDG")
 ```
@@ -150,8 +154,17 @@ unreg::country_names(905)       #unreg::code("Northern America", family = "M49")
 The tabulation functions are designed to return tables as *R* data frames that show countries and regions.
 
 ```{r} 
-#### Needs fixing... 
+#### Level 1
 head(unreg::reg_table(level = 1, family = "M49"))
+
+#### Level 2
+head(unreg::reg_table(level = 2, family = "M49"))
+
+
+#### Both
+head(unreg::reg_table(level = 1:2, family = "M49"))
+#### (alternative)
+head(unreg::reg_table(level = "", family = "M49"))
 ```
 
 

@@ -82,6 +82,7 @@ divider("MAKING SYSDATA")
 sourceDir("data-raw")
 
 ### Document
+divider("MAKING DOCUMENTATION")
 devtools::document()
 
 ### Do all tests
@@ -91,8 +92,5 @@ devtools::test(reporter = c("summary", "fail"))
 ### Install
 divider("INSTALLING")
 write_sha1_DESC(pkg_dir = ".", git_dir = "..")
-devtools::install()
+devtools::install(build_vignettes = TRUE)
 clean_sha1_DESC(pkg_dir = ".")
-
-## or.. if needed
-## devtools::install(build_vignettes = TRUE)
