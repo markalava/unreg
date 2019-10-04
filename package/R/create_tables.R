@@ -5,6 +5,9 @@
 
 ### Subset unloc_df to get just countries
 make_countries_df <- function(df = unloc_df) df[df$location_type == 4,]
+subset_countries_df <- function(country_code, df = make_countries_df()) {
+    df[df$country_code == country_code, ,drop = FALSE]
+    }
 
 ### Substitute 'agcode_XXX'
 substitute_agcodes <- function(agcodes, in_df, put_in_colname,

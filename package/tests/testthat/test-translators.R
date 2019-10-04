@@ -1,5 +1,7 @@
 context("Test translator functions")
 
+## TODO: test that passing regions, invalid codes/names, return warnings and 'NA's.
+
 test_that("'code' and 'name' return the right length results", {
     expect_equal(length(code(c("france", "france", "spain"))), 3)
     expect_equal(length(name(c(250, 724, 250))), 3)
@@ -19,6 +21,26 @@ test_that("'code' and 'name' return the right class of results", {
 test_that("'reg_code' and 'reg_name' return the right length results", {
     expect_equal(length(reg_code(4)), 1)
     expect_equal(length(reg_code(4, family = "SDG")), 1)
+    expect_equal(length(reg_code(4, family = "WB")), 1)
     expect_equal(length(reg_code(c(4, 250, 901))), 3)
     expect_equal(length(reg_code(c(4, 250, 901), family = "SDG")), 3)
+    expect_equal(length(reg_code(c(4, 250, 901), family = "WB")), 3)
+
+    expect_equal(length(reg_name(4)), 1)
+    expect_equal(length(reg_name(4, family = "SDG")), 1)
+    expect_equal(length(reg_name(4, family = "WB")), 1)
+    expect_equal(length(reg_name(c(4, 250, 901))), 3)
+    expect_equal(length(reg_name(c(4, 250, 901), family = "SDG")), 3)
+    expect_equal(length(reg_name(c(4, 250, 901), family = "WB")), 3)
+})
+
+test_that("'reg_code' and 'reg_name' return the right class of results", {
+    expect_is(reg_code(c("france", "france", "spain")), "numeric")
+    expect_is(reg_name(c(250, 724, 250)), "character")
+
+    expect_true(is.na(reg_code(NA)))
+    expect_true(is.na(reg_code(c("france", NA, "france"))[2]))
+    expect_true(is.na(reg_code(c("lac", NA, "lac"))[2]))
+    expect_true(is.na(reg_name(NA)))
+    expect_true(is.na(reg_name(c(4, NA, 4))[2]))
     })

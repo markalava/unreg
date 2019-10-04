@@ -77,6 +77,8 @@ list_country_codes <- function() {
 list_reg_codes <- function(level = c("1", "2"),
                            family = c("M49", "SDG", "WB", "Dev")) {
 
+    ## TODO: Allow level to be 1:2
+
     family <- match.arg(family)
 
     level <- as.character(level)

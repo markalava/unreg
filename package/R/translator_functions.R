@@ -44,11 +44,18 @@
 ##' @export
 code <- function(name, family = c("M49", "SDG")) {
 
+    name <- tolower(name_subs(name))
+    family <- match.arg(family)
+
+    ## 'NA' and invalid names mapped to 'NA'
     na.name <- is.na(name)
+    na.name <- na.name | invalid_names(name, clean = FALSE)
     if(any(na.name)) {
         out <- numeric(length(name))
         out[na.name] <- NA
-        out[!na.name] <- code(name[!na.name], family = family)
+        if(length(out[!na.name]) > 0) {
+            out[!na.name] <- code(name[!na.name], family = family)
+        }
         return(out)
     }
 
@@ -58,9 +65,7 @@ code <- function(name, family = c("M49", "SDG")) {
         name[num_as_char] <- name(as.numeric(name[num_as_char]))
     }
 
-    name <- tolower(name_subs(name))
     miss_fam <- missing(family) || is.null(family)
-    family <- match.arg(family)
 
     rows <- lapply(name, function(z) {
         which(z == tolower(unloc_df$name), useNames = FALSE)})
@@ -101,25 +106,32 @@ code <- function(name, family = c("M49", "SDG")) {
 ##'
 ##' @export
 name <- function(code) {
+
+    ## 'NA' and non-country codes mapped to 'NA'
+    na.code <- is.na(code)
+    na.code <- na.code | invalid_codes(code)
+    if(any(na.code)) {
+        out <- numeric(length(code))
+        out[na.code] <- NA
+        if(length(out[!na.code]) > 0) {
+            out[!na.code] <- name(code[!na.code])
+        }
+        return(out)
+    }
+
     code <- as.numeric(code)
     vapply(code, function(z) {
-        if(is.na(z)) return(as.character(NA))
-        else {
-            idx <- which(z == unloc_df$country_code,
+        idx <- which(z == unloc_df$country_code,
                          useNames = FALSE)
             return(unloc_df[idx, "name"])
-        }
-    },
-    FUN.VALUE = character(1),
-    USE.NAMES = FALSE)
+    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
 }
 
 
-##' Region code associated with a country or region
+##' Region code associated with a country
 ##'
-##' Returns the region code associated with a given country code.
-##'
-##' If a region code is supplied it will just be returned.
+##' Returns the region code associated with a given country code. An error is thrown if a region
+##' code is supplied.
 ##'
 ##' @param x \emph{Country} identifier. Interpreted as \dQuote{code}
 ##'     if \code{is.numeric(x)} and \Quote{name} if
@@ -150,16 +162,28 @@ name <- function(code) {
 reg_code <- function(x, level = c("1","2"),
                      family = c("M49", "SDG", "WB", "Dev")) {
 
+    level <- as.character(level)
+    level <- match.arg(level)
+
     family <- match.arg(family)
 
     if(is.numeric(x)) {
         code <- x
     } else if(is.character(x)) {
         code <- code(x, family = family)
-    }
+    } else code <- NA
 
-    level <- as.character(level)
-    level <- match.arg(level)
+    ## 'NA' and non-country codes mapped to 'NA'
+    na.code <- is.na(code)
+    na.code <- na.code | invalid_country_codes(code)
+    if(any(na.code)) {
+        out <- numeric(length(code))
+        out[na.code] <- NA
+        if(length(out[!na.code]) > 0) {
+            out[!na.code] <- reg_code(code[!na.code], level = level, family = family)
+        }
+        return(out)
+    }
 
     if(identical(family, "M49")) {
         if(identical(level, "1")) {
@@ -173,21 +197,21 @@ reg_code <- function(x, level = c("1","2"),
                 }, USE.NAMES = FALSE)), "reg_code"]
             return(as.numeric(out))
         }
-    } else if(identical(family, "SDG")) {
-        if(identical(level, "1")) {
-            loc4_sdg <- make_loc4_sdg_df()
-            loc4_sdg <- loc4_sdg[unlist(sapply(code, function(z) {
-                which(z == loc4_sdg$country_code, useNames = FALSE)
-                }, USE.NAMES = FALSE)),,drop = FALSE]
-            sdg_reg_1_code <- rep(NA, nrow(loc4_sdg))
-            for(i in seq_along(sdg_reg_1_code)) {
-                idx <- which(as.logical(loc4_sdg[i, internal_sdg_reg_L1_ag_cols, drop = TRUE]), useNames = FALSE)
-                sdg_reg_1_code[i] <- internal_sdg_reg_L1_country_codes[idx]
+    } else if(family %in% c("SDG", "WB")) {
+
+        internal_reg_country_codes <-
+            get(paste0("internal_", tolower(family),
+                       "_reg_L", level, "_country_codes"))
+
+        vapply(code, function(z) {
+            unloc_df_z <- unloc_df[unloc_df$z == z,]
+            for(codej in internal_reg_country_codes) {
+                colnamej <- make_agcode_col_names(codej)
+                if(identical(unloc_df_z[, colnamej], codej)) break()
             }
-            return(sdg_reg_1_code)
-        } else if(identical(level, "2")) {
-            return(reg_code(x = x, level = "2", family = "M49"))
-        }
+            return(as.numeric(codej))
+        },
+        FUN.VALUE = numeric(1), USE.NAMES = FALSE)
     } else stop("family = '", family, "' not implemented.")
 }
 
@@ -244,6 +268,19 @@ country_codes <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
         code <- x
     } else if(is.character(x)) {
         code <- code(x, family = family)
+    } else code <- NA
+
+    ## TO DO: VALIDATE 'x' is a region from family 'family'
+    ## 'NA' and non-country codes mapped to 'NA'
+    na.code <- is.na(code)
+    na.code <- na.code | invalid_reg_codes(code, family = family)
+    if(any(na.code)) {
+        out <- numeric(length(code))
+        out[na.code] <- NA
+        if(length(out[!na.code]) > 0) {
+            out[!na.code] <- country_codes(code[!na.code], level = level, family = family)
+            return(out)
+        }
     }
 
     if(identical(family, "M49")) {
