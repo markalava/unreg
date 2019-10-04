@@ -61,61 +61,9 @@ M49_table <- function(codes = TRUE, names = TRUE,
     }
 
 
-### SDG table backend
-SDG_table <- function(codes = TRUE, names = TRUE,
-                                    level = c("", "1", "2"),
-                                    stringsAsFactors = FALSE) {
-
-    if(sum(codes, names) < 1) stop("Nothing to return.")
-
-    if(is.null(level) || identical(level, "")) level <- 1:2
-    level <- as.character(level)
-    level <- match.arg(level, several.ok = TRUE)
-    l1 <- "1" %in% level
-    l2 <- "2" %in% level
-
-    countries_df <- make_countries_df(unloc_df)
-
-    df <- data.frame(code = countries_df$country_code,
-                     name = countries_df$name,
-                     stringsAsFactors = stringsAsFactors)
-
-    if(l1) {
-        df <- substitute_agcodes(internal_sdg_reg_L1_country_codes,
-                           in_df = df,
-                           put_in_colname = "SDG_reg_1_code",
-                           ref_df = countries_df)
-        df[, "SDG_reg_1_name"] <- name(df[, "SDG_reg_1_code"])
-    }
-    if(l2) {
-        df <- substitute_agcodes(internal_sdg_reg_L2_country_codes,
-                           in_df = df,
-                           put_in_colname = "SDG_reg_2_code",
-                           ref_df = countries_df)
-        df[, "SDG_reg_2_name"] <- name(df[, "SDG_reg_2_code"])
-    }
-
-    if(!names) return(df[,seq(from = 1, to = ncol(df), by = 2)])
-    else {
-        if(stringsAsFactors) {
-            for(j in seq(from = 2, to = ncol(df), by = 2)) {
-                df[,j] <- factor(df[,j])
-            }
-        } else {
-            for(j in seq(from = 2, to = ncol(df), by = 2)) {
-                df[,j] <- as.character(df[,j])
-            }
-        }
-    }
-
-    if(!codes) return(df[,seq(from = 2, to = ncol(df), by = 2)])
-    else return(df)
-}
-
-
-### WB table backend
-WB_table <- function(codes = TRUE, names = TRUE,
-                     level = c("", "1", "2"),
+### agcode table backend
+agcode_table <- function(codes = TRUE, names = TRUE,
+                     level = c("", "1", "2"), family = c("SDG", "WB"),
                      stringsAsFactors = FALSE) {
 
     if(sum(codes, names) < 1) stop("Nothing to return.")
@@ -126,25 +74,25 @@ WB_table <- function(codes = TRUE, names = TRUE,
     l1 <- "1" %in% level
     l2 <- "2" %in% level
 
+    family <- match.arg(family, several.ok = FALSE)
+
     countries_df <- make_countries_df(unloc_df)
 
     df <- data.frame(code = countries_df$country_code,
                      name = countries_df$name,
                      stringsAsFactors = stringsAsFactors)
 
-    if(l1) {
-        df <- substitute_agcodes(internal_wb_reg_L1_country_codes,
-                           in_df = df,
-                           put_in_colname = "WB_reg_1_code",
-                           ref_df = countries_df)
-        df$WB_reg_1_name <- name(df$WB_reg_1_code)
-    }
-    if(l2) {
-        df <- substitute_agcodes(internal_wb_reg_L2_country_codes,
-                           in_df = df,
-                           put_in_colname = "WB_reg_2_code",
-                           ref_df = countries_df)
-        df$WB_reg_2_name <- name(df$WB_reg_2_code)
+    for(lev in level) {
+        internal_reg_country_codes <-
+            get(paste0("internal_", tolower(family),
+                       "_reg_L", lev, "_country_codes"))
+        reg_code <- paste0(tolower(family), "_reg_", lev, "_code")
+        reg_name <- paste0(tolower(family), "_reg_", lev, "_name")
+        df <- substitute_agcodes(internal_reg_country_codes,
+                                 in_df = df,
+                                 put_in_colname = reg_code,
+                                 ref_df = countries_df)
+        df[,reg_name] <- name(df[,reg_code])
     }
 
     if(!names) return(df[,seq(from = 1, to = ncol(df), by = 2)])
@@ -217,7 +165,8 @@ reg_table <- function(level = c("", "1", "2"),
     }
 
     if("SDG" %in% family) {
-        out <- SDG_table(codes = TRUE, names = names, level = level,
+        out <- agcode_table(codes = TRUE, names = names, level = level,
+                            family = "SDG",
                          stringsAsFactors = stringsAsFactors)
         out <- out[, !colnames(out)=="name", drop = FALSE]
         df <- merge(df, out,
@@ -225,7 +174,8 @@ reg_table <- function(level = c("", "1", "2"),
     }
 
     if("WB" %in% family) {
-        out <- WB_table(codes = TRUE, names = names, level = level,
+        out <- agcode_table(codes = TRUE, names = names, level = level,
+                            family = "WB",
                          stringsAsFactors = stringsAsFactors)
         out <- out[, !colnames(out)=="name", drop = FALSE]
         df <- merge(df, out,
