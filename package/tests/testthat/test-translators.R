@@ -15,3 +15,10 @@ test_that("'code' and 'name' return the right class of results", {
     expect_true(is.na(name(NA)))
     expect_true(is.na(name(c(4, NA, 4))[2]))
 })
+
+test_that("'reg_code' and 'reg_name' return the right length results", {
+    expect_equal(length(reg_code(4)), 1)
+    expect_equal(length(reg_code(4, family = "SDG")), 1)
+    expect_equal(length(reg_code(c(4, 250, 901))), 3)
+    expect_equal(length(reg_code(c(4, 250, 901), family = "SDG")), 3)
+    })
