@@ -185,7 +185,7 @@ reg_table <- function(level = c("", "1", "2"),
                     by = "code", all.x = TRUE)
     }
 
-    if(any(family %in% c("WB", "Dev"))) message("family types 'WB' and 'Dev' not yet implemented.")
+    if(any(family %in% c("Dev"))) message("family type 'Dev' not yet implemented.")
 
     return(df)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/translator_functions.R
 \name{reg_code}
 \alias{reg_code}
-\title{Region code associated with a country or region}
+\title{Region code associated with a country}
 \usage{
 reg_code(x, level = c("1", "2"), family = c("M49", "SDG", "WB", "Dev"))
 }
@@ -24,10 +24,8 @@ A vector the same length as \code{x} containing the
     code(s) as numeric.
 }
 \description{
-Returns the region code associated with a given country code.
-}
-\details{
-If a region code is supplied it will just be returned.
+Returns the region code associated with a given country code. An error is thrown if a region
+code is supplied.
 }
 \examples{
 
