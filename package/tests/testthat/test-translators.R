@@ -43,4 +43,9 @@ test_that("'reg_code' and 'reg_name' return the right class of results", {
     expect_true(is.na(reg_code(c("lac", NA, "lac"))[2]))
     expect_true(is.na(reg_name(NA)))
     expect_true(is.na(reg_name(c(4, NA, 4))[2]))
-    })
+})
+
+## test_that("'reg_name' returns correct answer in random cases", {
+##     expect_equal(reg_name("Afghanistan", family = "SDG"), "Asia")
+##     expect_equal(reg_name("Afghanistan", level = "1", family = "SDG"), "Asia")
+##     })

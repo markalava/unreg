@@ -5,14 +5,19 @@
 
 ##' Country or region code
 ##'
-##' Returns the ISO code(s) associated with \code{name}. If a region
-##' is given, all codes associated will be returned in a vector.
+##' Returns the ISO code(s) associated with \code{name} (a country or aggregate).
 ##'
 ##' Names of regions are not unique, e.g., \dQuote{Latin America and
 ##' the Caribbean} is a region in the \dQuote{M49} and \dQuote{SDG}
 ##' families and, as a restult, has two codes. Ambiguities in such
-##' cases are resolved with \code{family}. If \code{family} is not
+##' cases are resolved with argument \code{family}. If \code{family} is not
 ##' supplied a warning is given and \dQuote{M49} is assumed.
+##'
+##' The argument \code{family} is needed only to do this
+##' disambiguation. Since only the \dQuote{M49} and \dQuote{SDG}
+##' families have overlaps in region names, no other family type
+##' should be passed to \code{family} when calling this particular
+##' function.
 ##'
 ##' @param name Name(s) of country(ies) or region(s) for which codes
 ##'     are desired (case insensitive). Abbreviations may be used.
@@ -134,7 +139,7 @@ name <- function(code) {
 ##' code is supplied.
 ##'
 ##' @param x \emph{Country} identifier. Interpreted as \dQuote{code}
-##'     if \code{is.numeric(x)} and \Quote{name} if
+##'     if \code{is.numeric(x)} and \dQuote{name} if
 ##'     \code{is.character(x)}.
 ##' @param family Family to which the region referenced by \code{code}
 ##'     belongs.
@@ -170,7 +175,12 @@ reg_code <- function(x, level = c("1","2"),
     if(is.numeric(x)) {
         code <- x
     } else if(is.character(x)) {
-        code <- code(x, family = family)
+        ## NB: 'code()' only cares about family 'M49' versus family
+        ## 'SDG' so it can disambiguate names in those two
+        ## families. Don't pass any other family to 'code()'.
+        if(family == "SDG") temp_fam <- "SDG"
+        else temp_fam <- "M49"
+        code <- code(x, family = temp_fam)
     } else code <- NA
 
     ## 'NA' and non-country codes mapped to 'NA'
@@ -197,19 +207,24 @@ reg_code <- function(x, level = c("1","2"),
                 }, USE.NAMES = FALSE)), "reg_code"]
             return(as.numeric(out))
         }
-    } else if(family %in% c("SDG", "WB")) {
+    } else if(family %in% c("SDG", "WB", "Dev")) {
 
         internal_reg_country_codes <-
             get(paste0("internal_", tolower(family),
                        "_reg_L", level, "_country_codes"))
+        agcode_col_names <-
+            make_agcode_col_names(internal_reg_country_codes)
 
         vapply(code, function(z) {
-            unloc_df_z <- unloc_df[unloc_df$z == z,]
-            for(codej in internal_reg_country_codes) {
-                colnamej <- make_agcode_col_names(codej)
-                if(identical(unloc_df_z[, colnamej], codej)) break()
-            }
-            return(as.numeric(codej))
+            ## Subset 'unloc_df': only the row for the country and the
+            ## columns with the country names and codes and agg
+            ## columns
+            unloc_df_z <-
+                unloc_df[unloc_df$country_code == z, agcode_col_names]
+            out <-
+                internal_reg_country_codes[unloc_df_z %in% internal_reg_country_codes]
+            if(!identical(length(out), 1L)) stop("code '", z, "' has no membership of family '", family, "'")
+            return(out)
         },
         FUN.VALUE = numeric(1), USE.NAMES = FALSE)
     } else stop("family = '", family, "' not implemented.")

@@ -18,15 +18,20 @@ A vector the same length as \code{code} containing the ISO
     code(s) as numeric.
 }
 \description{
-Returns the ISO code(s) associated with \code{name}. If a region
-is given, all codes associated will be returned in a vector.
+Returns the ISO code(s) associated with \code{name} (a country or aggregate).
 }
 \details{
 Names of regions are not unique, e.g., \dQuote{Latin America and
 the Caribbean} is a region in the \dQuote{M49} and \dQuote{SDG}
 families and, as a restult, has two codes. Ambiguities in such
-cases are resolved with \code{family}. If \code{family} is not
+cases are resolved with argument \code{family}. If \code{family} is not
 supplied a warning is given and \dQuote{M49} is assumed.
+
+The argument \code{family} is needed only to do this
+disambiguation. Since only the \dQuote{M49} and \dQuote{SDG}
+families have overlaps in region names, no other family type
+should be passed to \code{family} when calling this particular
+function.
 }
 \examples{
 ## Countries

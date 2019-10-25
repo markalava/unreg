@@ -8,7 +8,7 @@ country_names(x, family = c("M49", "SDG", "WB", "Dev"))
 }
 \arguments{
 \item{x}{\emph{Country} identifier. Interpreted as \dQuote{code}
-if \code{is.numeric(x)} and \Quote{name} if
+if \code{is.numeric(x)} and \dQuote{name} if
 \code{is.character(x)}.}
 
 \item{family}{Family to which the region referenced by \code{code}
