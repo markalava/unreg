@@ -39,6 +39,16 @@ test_that("table functions return tables of the correct dimension", {
     expect_equal(dim(agcode_table(family = "WB", level = "")),
                  c(nrow(unloc_df[unloc_df$location_type == 4,]), 6))
 
+    ## Dev_table
+    expect_equal(dim(agcode_table(family = "Dev", level = 1)),
+                 c(nrow(unloc_df[unloc_df$location_type == 4,]), 4))
+    expect_equal(dim(agcode_table(family = "Dev", level = 2)),
+                 c(nrow(unloc_df[unloc_df$location_type == 4,]), 4))
+    expect_equal(dim(agcode_table(family = "Dev", level = 1:2)),
+                 c(nrow(unloc_df[unloc_df$location_type == 4,]), 6))
+    expect_equal(dim(agcode_table(family = "Dev", level = "")),
+                 c(nrow(unloc_df[unloc_df$location_type == 4,]), 6))
+
     ## reg_table
     expect_equal(dim(reg_table(level = 1, family = c("M49", "SDG", "WB"))),
                  c(nrow(unloc_df[unloc_df$location_type == 4,]), 8))

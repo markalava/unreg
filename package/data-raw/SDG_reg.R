@@ -70,6 +70,23 @@ internal_wb_reg_L2_country_codes <-
 internal_wb_reg_L2_ag_cols <- paste0("agcode_", internal_wb_reg_L2_country_codes, "000")
 
 ###-----------------------------------------------------------------------------
+### * 'country_codes' of the rows containing Dev regions
+
+internal_dev_reg_L1_country_codes <-
+    c(901,                      #More developed regions
+      902                       #Less developed regions
+      )
+
+internal_dev_reg_L1_ag_cols <- paste0("agcode_", internal_dev_reg_L1_country_codes, "000")
+
+internal_dev_reg_L2_country_codes <-
+    c(934,                      #Less developed regions excluding least developed countries
+      941                       #Least developed countries
+      )
+
+internal_dev_reg_L2_ag_cols <- paste0("agcode_", internal_dev_reg_L2_country_codes, "000")
+
+###-----------------------------------------------------------------------------
 ### * Execute
 
 usethis::use_data(internal_sdg_reg_L1_country_codes, internal_sdg_reg_L1_ag_cols,

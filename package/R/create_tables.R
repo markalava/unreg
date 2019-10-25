@@ -66,7 +66,7 @@ M49_table <- function(codes = TRUE, names = TRUE,
 
 ### agcode table backend
 agcode_table <- function(codes = TRUE, names = TRUE,
-                     level = c("", "1", "2"), family = c("SDG", "WB"),
+                     level = c("", "1", "2"), family = c("SDG", "WB", "Dev"),
                      stringsAsFactors = FALSE) {
 
     if(sum(codes, names) < 1) stop("Nothing to return.")
@@ -185,7 +185,16 @@ reg_table <- function(level = c("", "1", "2"),
                     by = "code", all.x = TRUE)
     }
 
-    if(any(family %in% c("Dev"))) message("family type 'Dev' not yet implemented.")
+    if("Dev" %in% family) {
+        out <- agcode_table(codes = TRUE, names = names, level = level,
+                            family = "Dev",
+                         stringsAsFactors = stringsAsFactors)
+        out <- out[, !colnames(out)=="name", drop = FALSE]
+        df <- merge(df, out,
+                    by = "code", all.x = TRUE)
+    }
+
+    ## if(any(family %in% c("Dev"))) message("family type 'Dev' not yet implemented.")
 
     return(df)
 }
