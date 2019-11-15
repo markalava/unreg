@@ -24,8 +24,9 @@ Returns the ISO code(s) associated with \code{name} (a country or aggregate).
 Names of regions are not unique, e.g., \dQuote{Latin America and
 the Caribbean} is a region in the \dQuote{M49} and \dQuote{SDG}
 families and, as a restult, has two codes. Ambiguities in such
-cases are resolved with argument \code{family}. If \code{family} is not
-supplied a warning is given and \dQuote{M49} is assumed.
+cases are resolved with argument \code{family}. If \code{name} is
+ambiguous and \code{family} is not supplied a warning is given and
+\dQuote{M49} is assumed.
 
 The argument \code{family} is needed only to do this
 disambiguation. Since only the \dQuote{M49} and \dQuote{SDG}

@@ -18,20 +18,26 @@ test_that("'code' and 'name' return the right class of results", {
     expect_true(is.na(name(c(4, NA, 4))[2]))
 })
 
+test_that("'code' correctly uses the right code if multiple names across families", {
+    expect_equal(suppressWarnings(code(c("Africa", "Europe"))), c(903, 908))
+    expect_equal(code(c("Africa", "Europe"), family = "M49"), c(903, 908))
+    expect_equal(code(c("Africa", "Europe"), family = "SDG"), c(903, 917))
+})
+
 test_that("'reg_code' and 'reg_name' return the right length results", {
     expect_equal(length(reg_code(4)), 1)
     expect_equal(length(reg_code(4, family = "SDG")), 1)
     expect_equal(length(reg_code(4, family = "WB")), 1)
-    expect_equal(length(reg_code(c(4, 250, 901))), 3)
-    expect_equal(length(reg_code(c(4, 250, 901), family = "SDG")), 3)
-    expect_equal(length(reg_code(c(4, 250, 901), family = "WB")), 3)
+    expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901)))), 3)
+    expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901), family = "SDG"))), 3)
+    expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901), family = "WB"))), 3)
 
     expect_equal(length(reg_name(4)), 1)
     expect_equal(length(reg_name(4, family = "SDG")), 1)
     expect_equal(length(reg_name(4, family = "WB")), 1)
-    expect_equal(length(reg_name(c(4, 250, 901))), 3)
-    expect_equal(length(reg_name(c(4, 250, 901), family = "SDG")), 3)
-    expect_equal(length(reg_name(c(4, 250, 901), family = "WB")), 3)
+    expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901)))), 3)
+    expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901), family = "SDG"))), 3)
+    expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901), family = "WB"))), 3)
 })
 
 test_that("'reg_code' and 'reg_name' return the right class of results", {
@@ -45,7 +51,9 @@ test_that("'reg_code' and 'reg_name' return the right class of results", {
     expect_true(is.na(reg_name(c(4, NA, 4))[2]))
 })
 
-## test_that("'reg_name' returns correct answer in random cases", {
-##     expect_equal(reg_name("Afghanistan", family = "SDG"), "Asia")
-##     expect_equal(reg_name("Afghanistan", level = "1", family = "SDG"), "Asia")
-##     })
+test_that("'reg_name' returns correct answer in random cases", {
+    expect_equal(reg_name("Afghanistan", family = "SDG"), "Asia")
+    expect_equal(reg_name("Afghanistan", level = "1", family = "SDG"), "Asia")
+    expect_equal(suppressWarnings(reg_name(c(NA, "blip", "Afghanistan", NA, "Canada", "foo"), 2, family = "SDG"),
+                 c(NA, NA, "Southern Asia", NA, "Northern America", NA)))
+})

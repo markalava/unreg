@@ -24,9 +24,8 @@ list_names <- function(capitalize = TRUE) {
 
 ##' List all codes of countries, regions, etc
 ##'
-##' Lists the unique, casefolded names in
-##' \code{unloc_df$name}. \code{unloc_df} is from the
-##' \pkg{wpp2019} package.
+##' Lists the unique codes in \code{unloc_df$code}. \code{unloc_df} is
+##' from the \pkg{wpp2019} package.
 ##'
 ##' @return Numeric vector of unique codes (countries, regions, etc)
 ##' @author Mark Wheldon
@@ -77,7 +76,7 @@ list_country_codes <- function() {
 list_reg_codes <- function(level = c("1", "2"),
                            family = c("M49", "SDG", "WB", "Dev")) {
 
-    ## TODO: Allow level to be 1:2
+    ## TODO: Allow level to be 1:2?
 
     family <- match.arg(family)
 

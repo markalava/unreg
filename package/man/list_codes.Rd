@@ -10,9 +10,8 @@ list_codes()
 Numeric vector of unique codes (countries, regions, etc)
 }
 \description{
-Lists the unique, casefolded names in
-\code{unloc_df$name}. \code{unloc_df} is from the
-\pkg{wpp2019} package.
+Lists the unique codes in \code{unloc_df$code}. \code{unloc_df} is
+from the \pkg{wpp2019} package.
 }
 \seealso{
 Other listing functions: \code{\link{list_country_codes}},

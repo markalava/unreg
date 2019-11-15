@@ -27,4 +27,7 @@ unloc_df <- UNlocations
 unloc_df$name <- as.character(unloc_df$name)
 unloc_df$reg_name <- as.character(unloc_df$reg_name)
 unloc_df$area_name <- as.character(unloc_df$area_name)
+
+## Set '-1' to 'NA'
+unloc_df[unloc_df == -1] <- NA
 rm(UNlocations)

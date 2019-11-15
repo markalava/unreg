@@ -10,8 +10,9 @@
 ##' Names of regions are not unique, e.g., \dQuote{Latin America and
 ##' the Caribbean} is a region in the \dQuote{M49} and \dQuote{SDG}
 ##' families and, as a restult, has two codes. Ambiguities in such
-##' cases are resolved with argument \code{family}. If \code{family} is not
-##' supplied a warning is given and \dQuote{M49} is assumed.
+##' cases are resolved with argument \code{family}. If \code{name} is
+##' ambiguous and \code{family} is not supplied a warning is given and
+##' \dQuote{M49} is assumed.
 ##'
 ##' The argument \code{family} is needed only to do this
 ##' disambiguation. Since only the \dQuote{M49} and \dQuote{SDG}
@@ -49,12 +50,13 @@
 ##' @export
 code <- function(name, family = c("M49", "SDG")) {
 
+    miss_fam <- missing(family) || is.null(family)
+
     name <- tolower(name_subs(name))
     family <- match.arg(family)
 
     ## 'NA' and invalid names mapped to 'NA'
-    na.name <- is.na(name)
-    na.name <- na.name | invalid_names(name, clean = FALSE)
+    na.name <- is.na(name) | invalid_names(name, clean = FALSE)
     if(any(na.name)) {
         out <- numeric(length(name))
         out[na.name] <- NA
@@ -66,11 +68,9 @@ code <- function(name, family = c("M49", "SDG")) {
 
     num_as_char <- suppressWarnings(!is.na(as.numeric(name)))
     if(any(num_as_char)) {
-        warning("It looks like you supplied some codes as character; treating them as numeric codes.")
+        message("It looks like you supplied some codes as character; treating them as numeric codes.")
         name[num_as_char] <- name(as.numeric(name[num_as_char]))
     }
-
-    miss_fam <- missing(family) || is.null(family)
 
     rows <- lapply(name, function(z) {
         which(z == tolower(unloc_df$name), useNames = FALSE)})
@@ -207,6 +207,13 @@ reg_code <- function(x, level = c("1","2"),
                 }, USE.NAMES = FALSE)), "reg_code"]
             return(as.numeric(out))
         }
+
+    } else if(identical(family, "SDG") && identical(level, "2")) {
+        ntham_code <- code %in% country_codes("Northern America", family = "M49")
+        out <- reg_code(code, level = "2", family = "M49")
+        out[ntham_code] <- code("Northern America", family = "M49")
+        return(as.numeric(out))
+
     } else if(family %in% c("SDG", "WB", "Dev")) {
 
         internal_reg_country_codes <-
