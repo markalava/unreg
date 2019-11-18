@@ -4,7 +4,7 @@
 \alias{country_codes}
 \title{Country codes associated with a region}
 \usage{
-country_codes(x, family = c("M49", "SDG", "WBInc", "Dev"))
+country_codes(x, family = c("M49", "SDG", "WB_inc", "Dev"))
 }
 \arguments{
 \item{x}{\emph{Country} identifier. Interpreted as \dQuote{code}

@@ -4,7 +4,7 @@
 \alias{reg_table}
 \title{Create table of countries and regions}
 \usage{
-reg_table(level = c("", "1", "2"), family = c("M49", "SDG", "WBInc",
+reg_table(level = c("", "1", "2"), family = c("M49", "SDG", "WB_inc",
   "Dev"), include_codes = TRUE, include_names = TRUE,
   stringsAsFactors = FALSE)
 }

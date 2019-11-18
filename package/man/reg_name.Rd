@@ -4,7 +4,7 @@
 \alias{reg_name}
 \title{Region name associated with a country or region}
 \usage{
-reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WBInc",
+reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WB_inc",
   "Dev"))
 }
 \arguments{

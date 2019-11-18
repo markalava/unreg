@@ -4,7 +4,7 @@
 \alias{reg_code}
 \title{Region code associated with a country}
 \usage{
-reg_code(x, level = c("1", "2"), family = c("M49", "SDG", "WBInc",
+reg_code(x, level = c("1", "2"), family = c("M49", "SDG", "WB_inc",
   "Dev"), verbose = FALSE)
 }
 \arguments{
