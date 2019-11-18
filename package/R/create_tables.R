@@ -23,15 +23,16 @@ subset_countries_df <- function(country_code, df = make_countries_df()) {
 ##'     \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
 ##'     character if supplied as numeric. The \sQuote{""}, or
 ##'     \code{NULL}, can be given to request all levels.
-##' @param include_codes Logial. Include country and region codes in the
-##'     result? You must set at least one of \code{include_codes} and
-##'     \code{include_names} to \code{TRUE}.
-##' @param include_names Logical. Include country and region names in the
-##'     result?
+##' @param include_codes Logial. Include country and region codes in
+##'     the result? You must set at least one of \code{include_codes}
+##'     and \code{include_names} to \code{TRUE}.
+##' @param include_names Logical. Include country and region names in
+##'     the result?
 ##' @param stringsAsFactors Passed to \code{\link{data.frame}}. Note
 ##'     the default is \code{FALSE}.
 ##' @inheritParams reg_code
-##' @return
+##' @return A data frame with country codes and names (if requested)
+##'     and additional columns for the region codes and names.
 ##' @author Mark Wheldon
 ##' @family Table functions
 ##'

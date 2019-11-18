@@ -18,15 +18,19 @@ character if supplied as numeric. The \sQuote{""}, or
 \item{family}{Family to which the region referenced by \code{code}
 belongs.}
 
-\item{include_codes}{Logial. Include country and region codes in the
-result? You must set at least one of \code{include_codes} and
-\code{include_names} to \code{TRUE}.}
+\item{include_codes}{Logial. Include country and region codes in
+the result? You must set at least one of \code{include_codes}
+and \code{include_names} to \code{TRUE}.}
 
-\item{include_names}{Logical. Include country and region names in the
-result?}
+\item{include_names}{Logical. Include country and region names in
+the result?}
 
 \item{stringsAsFactors}{Passed to \code{\link{data.frame}}. Note
 the default is \code{FALSE}.}
+}
+\value{
+A data frame with country codes and names (if requested)
+    and additional columns for the region codes and names.
 }
 \description{
 Creates a data frame with columns for country names and codes (if
