@@ -1,4 +1,6 @@
-## code to prepare `SDG_reg` dataset goes here
+###
+### Region codes for non-M49 families.
+###
 
 ###-----------------------------------------------------------------------------
 ### * 'country_codes' of the rows containing SDG regions
@@ -93,4 +95,6 @@ usethis::use_data(internal_sdg_reg_L1_country_codes, internal_sdg_reg_L1_ag_cols
                   internal_sdg_reg_L2_country_codes, internal_sdg_reg_L2_ag_cols,
                   internal_wb_reg_L1_country_codes, internal_wb_reg_L1_ag_cols,
                   internal_wb_reg_L2_country_codes, internal_wb_reg_L2_ag_cols,
+                  internal_dev_reg_L1_country_codes, internal_dev_reg_L1_ag_cols
+                  internal_dev_reg_L2_country_codes,internal_dev_reg_L2_ag_cols
                   internal = TRUE, overwrite = TRUE)

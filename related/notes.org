@@ -16,11 +16,12 @@
 
 ** Order in which to add families
 
-1. lists.R
-2. translator_functions.R
-3. create_tables.R
-4. test-translators.R
-5. test-tables.R
+1. region_codes.R
+2. lists.R
+3. translator_functions.R
+4. create_tables.R
+5. test-translators.R
+6. test-tables.R
 
 ** UNlocations
 
