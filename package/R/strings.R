@@ -25,6 +25,13 @@ name_subs <- function(x) {
 }
 
 
+### Make agcode variable names
+make_agcode_var_name <- function(level, family) {
+    paste0("internal_", tolower(family),
+       "_reg_L", level, "_country_codes")
+}
+
+
 ### Make agcode colnames
 make_agcode_col_names <- function(agcodes) {
     paste0("agcode_", agcodes, "000")

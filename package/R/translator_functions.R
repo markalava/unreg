@@ -165,7 +165,8 @@ name <- function(code) {
 ##'
 ##' @export
 reg_code <- function(x, level = c("1","2"),
-                     family = c("M49", "SDG", "WB", "Dev")) {
+                     family = c("M49", "SDG", "WB_inc", "Dev"),
+                     verbose = FALSE) {
 
     level <- as.character(level)
     level <- match.arg(level)
@@ -214,11 +215,10 @@ reg_code <- function(x, level = c("1","2"),
         out[ntham_code] <- code("Northern America", family = "M49")
         return(as.numeric(out))
 
-    } else if(family %in% c("SDG", "WB", "Dev")) {
+    } else if(family %in% c("SDG", "WB_inc", "Dev")) {
 
         internal_reg_country_codes <-
-            get(paste0("internal_", tolower(family),
-                       "_reg_L", level, "_country_codes"))
+            get(make_agcode_var_name(family = family, level = level))
         agcode_col_names <-
             make_agcode_col_names(internal_reg_country_codes)
 
@@ -230,7 +230,8 @@ reg_code <- function(x, level = c("1","2"),
                 unloc_df[unloc_df$country_code == z, agcode_col_names]
             out <-
                 internal_reg_country_codes[unloc_df_z %in% internal_reg_country_codes]
-            if(!identical(length(out), 1L)) stop("code '", z, "' has no membership of family '", family, "'")
+            if(!identical(length(out), 1L)) out <- NA
+            if(verbose) warning("code '", z, "' has no membership of family '", family, "'")
             return(out)
         },
         FUN.VALUE = numeric(1), USE.NAMES = FALSE)
@@ -261,7 +262,7 @@ reg_code <- function(x, level = c("1","2"),
 ##'
 ##' @export
 reg_name <- function(x, level = c("1","2"),
-                   family = c("M49", "SDG", "WB", "Dev")) {
+                   family = c("M49", "SDG", "WB_inc", "Dev")) {
     name(reg_code(x, family = family, level = level))
 }
 
@@ -276,7 +277,7 @@ reg_name <- function(x, level = c("1","2"),
 ##' @family translator functions
 ##'
 ##' @export
-country_codes <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
+country_codes <- function(x, family = c("M49", "SDG", "WB_inc", "Dev")) {
 
     if(length(x) > 1) {
         names(x) <- x
@@ -331,7 +332,7 @@ country_codes <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
 ##' @author Mark Wheldon
 ##' @family translator functions
 ##' @export
-country_names <- function(x, family = c("M49", "SDG", "WB", "Dev")) {
+country_names <- function(x, family = c("M49", "SDG", "WB_inc", "Dev")) {
     out <- country_codes(x = x, family = family)
     name(out)
 }

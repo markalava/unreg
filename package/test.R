@@ -20,7 +20,7 @@ load("R/sysdata.rda")
 
 ### TESTS
 
-## reg_name
+reg_table(level = "2", family = "WB")
 
-undebug(reg_code)
-reg_name(c(NA, "blip", "Afghanistan", NA, "Canada", "foo"), 2, family = "SDG")
+
+reg_code(175, family = "WB")

@@ -4,17 +4,18 @@
 \alias{country_table}
 \title{Create table with just countries and their codes}
 \usage{
-country_table(codes = TRUE, names = TRUE, stringsAsFactors = FALSE)
+country_table(include_codes = TRUE, include_names = TRUE,
+  stringsAsFactors = FALSE)
 }
 \value{
 A data frame with country codes, names, or both. Always a
-    data frame, even if one of \code{codes} or \code{names} is
+    data frame, even if one of \code{include_codes} or \code{include_names} is
     \code{FALSE}.
 }
 \description{
 Creates a table with country codes and their names. Optionally,
 just a table with names or codes. This function returns a data
-frame. If only one of \code{codes} and \code{names} is \code{TRUE}
+frame. If only one of \code{include_codes} and \code{include_names} is \code{TRUE}
 it will be a data frame with one column. If you want a vector of
 names or codes see \code{\link{code}} and \code{\link{name}}.
 }

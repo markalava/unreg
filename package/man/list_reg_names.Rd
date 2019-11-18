@@ -4,7 +4,7 @@
 \alias{list_reg_names}
 \title{List region names}
 \usage{
-list_reg_names(level = c("1", "2"), family = c("M49", "SDG", "WB",
+list_reg_names(level = c("1", "2"), family = c("M49", "SDG", "WBInc",
   "Dev"))
 }
 \arguments{

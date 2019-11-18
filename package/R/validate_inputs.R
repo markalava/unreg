@@ -54,3 +54,9 @@ invalid_reg_codes <- function(x, family) {
         not_val_x
     } else FALSE
 }
+
+## Check that 'family' and 'level' are compatible
+valid_region_families <- c("M49", "SDG", "WB_inc", "Dev")
+regions_with_L2 <- c("M49", "SDG", "Dev")
+## check_family_level <- function(f, l) {
+

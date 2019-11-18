@@ -4,7 +4,8 @@
 \alias{reg_name}
 \title{Region name associated with a country or region}
 \usage{
-reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WB", "Dev"))
+reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WBInc",
+  "Dev"))
 }
 \arguments{
 \item{x}{\emph{Country} identifier. Interpreted as \dQuote{code}

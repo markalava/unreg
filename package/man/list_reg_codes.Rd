@@ -4,7 +4,7 @@
 \alias{list_reg_codes}
 \title{List region codes}
 \usage{
-list_reg_codes(level = c("1", "2"), family = c("M49", "SDG", "WB",
+list_reg_codes(level = c("1", "2"), family = c("M49", "SDG", "WBInc",
   "Dev"))
 }
 \arguments{

@@ -53,23 +53,29 @@ internal_sdg_reg_L2_country_codes <-
 
 internal_sdg_reg_L2_ag_cols <- paste0("agcode_", internal_sdg_reg_L2_country_codes, "000")
 
+internal_sdg_reg_OTHER_country_codes <-
+    c(917                       #Europe
+      )
+
+internal_sdg_reg_OTHER_ag_cols <- paste0("agcode_", internal_sdg_reg_OTHER_country_codes, "000")
+
 ###-----------------------------------------------------------------------------
 ### * 'country_codes' of the rows containing WB regions
 
-internal_wb_reg_L1_country_codes <-
+internal_wb_inc_reg_L1_country_codes <-
     c(1503,                     #high income
-      1517,                     #middle income
+      1502,                     #upper middle income
+      1501,                     #lower middle
       1500                      #low income
       )
 
-internal_wb_reg_L1_ag_cols <- paste0("agcode_", internal_wb_reg_L1_country_codes, "000")
+internal_wb_inc_reg_L1_ag_cols <- paste0("agcode_", internal_wb_inc_reg_L1_country_codes, "000")
 
-internal_wb_reg_L2_country_codes <-
-    c(1502,                     #upper middle income
-      1501                      #lower middle
+internal_wb_inc_reg_OTHER_country_codes <-
+    c(1517                     #middle income
       )
 
-internal_wb_reg_L2_ag_cols <- paste0("agcode_", internal_wb_reg_L2_country_codes, "000")
+internal_wb_inc_reg_OTHER_ag_cols <- paste0("agcode_", internal_wb_inc_reg_OTHER_country_codes, "000")
 
 ###-----------------------------------------------------------------------------
 ### * 'country_codes' of the rows containing Dev regions
@@ -93,8 +99,9 @@ internal_dev_reg_L2_ag_cols <- paste0("agcode_", internal_dev_reg_L2_country_cod
 
 usethis::use_data(internal_sdg_reg_L1_country_codes, internal_sdg_reg_L1_ag_cols,
                   internal_sdg_reg_L2_country_codes, internal_sdg_reg_L2_ag_cols,
-                  internal_wb_reg_L1_country_codes, internal_wb_reg_L1_ag_cols,
-                  internal_wb_reg_L2_country_codes, internal_wb_reg_L2_ag_cols,
-                  internal_dev_reg_L1_country_codes, internal_dev_reg_L1_ag_cols
-                  internal_dev_reg_L2_country_codes,internal_dev_reg_L2_ag_cols
+                  internal_sdg_reg_OTHER_country_codes, internal_sdg_reg_OTHER_ag_cols,
+                  internal_wb_inc_reg_L1_country_codes, internal_wb_inc_reg_L1_ag_cols,
+                  internal_wb_inc_reg_OTHER_country_codes, internal_wb_inc_reg_OTHER_ag_cols,
+                  internal_dev_reg_L1_country_codes, internal_dev_reg_L1_ag_cols,
+                  internal_dev_reg_L2_country_codes,internal_dev_reg_L2_ag_cols,
                   internal = TRUE, overwrite = TRUE)

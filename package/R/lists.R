@@ -74,7 +74,7 @@ list_country_codes <- function() {
 ##' @family listing functions
 ##' @export
 list_reg_codes <- function(level = c("1", "2"),
-                           family = c("M49", "SDG", "WB", "Dev")) {
+                           family = c("M49", "SDG", "WB_inc", "Dev")) {
 
     ## TODO: Allow level to be 1:2?
 
@@ -111,7 +111,7 @@ list_reg_codes <- function(level = c("1", "2"),
 ##' @family listing functions
 ##' @export
 list_reg_names <- function(level = c("1", "2"),
-                           family = c("M49", "SDG", "WB", "Dev")) {
+                           family = c("M49", "SDG", "WB_inc", "Dev")) {
 
     family <- match.arg(family)
 

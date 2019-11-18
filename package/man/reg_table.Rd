@@ -4,8 +4,9 @@
 \alias{reg_table}
 \title{Create table of countries and regions}
 \usage{
-reg_table(level = c("", "1", "2"), family = c("M49", "SDG", "WB",
-  "Dev"), codes = TRUE, names = TRUE, stringsAsFactors = FALSE)
+reg_table(level = c("", "1", "2"), family = c("M49", "SDG", "WBInc",
+  "Dev"), include_codes = TRUE, include_names = TRUE,
+  stringsAsFactors = FALSE)
 }
 \arguments{
 \item{level}{Level of region. Higher levels are nested in lower
@@ -17,11 +18,11 @@ character if supplied as numeric. The \sQuote{""}, or
 \item{family}{Family to which the region referenced by \code{code}
 belongs.}
 
-\item{codes}{Logial. Include country and region codes in the
-result? You must set at least one of \code{codes} and
-\code{names} to \code{TRUE}.}
+\item{include_codes}{Logial. Include country and region codes in the
+result? You must set at least one of \code{include_codes} and
+\code{include_names} to \code{TRUE}.}
 
-\item{names}{Logical. Include country and region names in the
+\item{include_names}{Logical. Include country and region names in the
 result?}
 
 \item{stringsAsFactors}{Passed to \code{\link{data.frame}}. Note
@@ -30,6 +31,10 @@ the default is \code{FALSE}.}
 \description{
 Creates a data frame with columns for country names and codes (if
 requested) and corresponding regions (as requested).
+}
+\details{
+Unlike \code{\link{reg_code}} and \code{\link{reg_name}}, if
+\code{level} is not specified both are returned.
 }
 \examples{
 reg_table(level = 1, family = M49)

@@ -27,17 +27,17 @@ test_that("'code' correctly uses the right code if multiple names across familie
 test_that("'reg_code' and 'reg_name' return the right length results", {
     expect_equal(length(reg_code(4)), 1)
     expect_equal(length(reg_code(4, family = "SDG")), 1)
-    expect_equal(length(reg_code(4, family = "WB")), 1)
+    expect_equal(length(reg_code(4, family = "WB_inc")), 1)
     expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901)))), 3)
     expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901), family = "SDG"))), 3)
-    expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901), family = "WB"))), 3)
+    expect_equal(suppressWarnings(length(reg_code(c(4, 250, 901), family = "WB_inc"))), 3)
 
     expect_equal(length(reg_name(4)), 1)
     expect_equal(length(reg_name(4, family = "SDG")), 1)
-    expect_equal(length(reg_name(4, family = "WB")), 1)
+    expect_equal(length(reg_name(4, family = "WB_inc")), 1)
     expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901)))), 3)
     expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901), family = "SDG"))), 3)
-    expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901), family = "WB"))), 3)
+    expect_equal(suppressWarnings(length(reg_name(c(4, 250, 901), family = "WB_inc"))), 3)
 })
 
 test_that("'reg_code' and 'reg_name' return the right class of results", {
@@ -46,14 +46,14 @@ test_that("'reg_code' and 'reg_name' return the right class of results", {
 
     expect_true(is.na(reg_code(NA)))
     expect_true(is.na(reg_code(c("france", NA, "france"))[2]))
-    expect_true(is.na(reg_code(c("lac", NA, "lac"))[2]))
+    expect_true(is.na(suppressWarnings(reg_code(c("lac", NA, "lac")))[2]))
     expect_true(is.na(reg_name(NA)))
     expect_true(is.na(reg_name(c(4, NA, 4))[2]))
 })
 
 test_that("'reg_name' returns correct answer in random cases", {
-    expect_equal(reg_name("Afghanistan", family = "SDG"), "Asia")
-    expect_equal(reg_name("Afghanistan", level = "1", family = "SDG"), "Asia")
-    expect_equal(suppressWarnings(reg_name(c(NA, "blip", "Afghanistan", NA, "Canada", "foo"), 2, family = "SDG"),
-                 c(NA, NA, "Southern Asia", NA, "Northern America", NA)))
+    expect_equal(reg_name("Afghanistan", family = "SDG"), "Central and Southern Asia")
+    expect_equal(reg_name("Afghanistan", level = "1", family = "SDG"), "Central and Southern Asia")
+    expect_equal(suppressWarnings(reg_name(c(NA, "blip", "Afghanistan", NA, "Canada", "foo"), 2, family = "SDG")),
+                 c(NA, NA, "Southern Asia", NA, "Northern America", NA))
 })
