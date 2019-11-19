@@ -20,7 +20,7 @@ load("R/sysdata.rda")
 
 ### TESTS
 
-reg_table(level = "2", family = "WB")
+head(reg_table(level = "1", family = "WB"))
 
 
-reg_code(175, family = "WB")
+reg_name(175, family = "WB")

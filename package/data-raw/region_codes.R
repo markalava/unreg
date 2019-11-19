@@ -66,7 +66,8 @@ internal_wb_inc_reg_L1_country_codes <-
     c(1503,                     #high income
       1502,                     #upper middle income
       1501,                     #lower middle
-      1500                      #low income
+      1500,                     #low income
+      1518                      #no income group available
       )
 
 internal_wb_inc_reg_L1_ag_cols <- paste0("agcode_", internal_wb_inc_reg_L1_country_codes, "000")
