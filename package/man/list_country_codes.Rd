@@ -13,10 +13,12 @@ Numeric vector of country codes.
 All country codes are listed.
 }
 \seealso{
-Other listing functions: \code{\link{list_codes}},
-  \code{\link{list_country_names}},
-  \code{\link{list_names}}, \code{\link{list_reg_codes}},
-  \code{\link{list_reg_names}}
+Other listing functions: 
+\code{\link{list_codes}()},
+\code{\link{list_country_names}()},
+\code{\link{list_names}()},
+\code{\link{list_reg_codes}()},
+\code{\link{list_reg_names}()}
 }
 \author{
 Mark Wheldon

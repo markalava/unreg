@@ -23,11 +23,12 @@ title case. Some region names are stored in \code{unloc_df} in
 all caps (e.g., "AFRICA").
 }
 \seealso{
-Other listing functions: \code{\link{list_codes}},
-  \code{\link{list_country_codes}},
-  \code{\link{list_country_names}},
-  \code{\link{list_reg_codes}},
-  \code{\link{list_reg_names}}
+Other listing functions: 
+\code{\link{list_codes}()},
+\code{\link{list_country_codes}()},
+\code{\link{list_country_names}()},
+\code{\link{list_reg_codes}()},
+\code{\link{list_reg_names}()}
 }
 \author{
 Mark Wheldon

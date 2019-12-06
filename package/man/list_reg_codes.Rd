@@ -4,8 +4,7 @@
 \alias{list_reg_codes}
 \title{List region codes}
 \usage{
-list_reg_codes(level = c("1", "2"), family = c("M49", "SDG", "WB_inc",
-  "Dev"))
+list_reg_codes(level = c("1", "2"), family = c("M49", "SDG", "WB_inc", "Dev"))
 }
 \arguments{
 \item{level}{Level of region. Higher levels are nested in
@@ -23,10 +22,12 @@ Character vector of region codes
 List all region codes for the given family and level.
 }
 \seealso{
-Other listing functions: \code{\link{list_codes}},
-  \code{\link{list_country_codes}},
-  \code{\link{list_country_names}},
-  \code{\link{list_names}}, \code{\link{list_reg_names}}
+Other listing functions: 
+\code{\link{list_codes}()},
+\code{\link{list_country_codes}()},
+\code{\link{list_country_names}()},
+\code{\link{list_names}()},
+\code{\link{list_reg_names}()}
 }
 \author{
 Mark Wheldon

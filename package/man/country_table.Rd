@@ -4,8 +4,11 @@
 \alias{country_table}
 \title{Create table with just countries and their codes}
 \usage{
-country_table(include_codes = TRUE, include_names = TRUE,
-  stringsAsFactors = FALSE)
+country_table(
+  include_codes = TRUE,
+  include_names = TRUE,
+  stringsAsFactors = FALSE
+)
 }
 \value{
 A data frame with country codes, names, or both. Always a
@@ -20,7 +23,8 @@ it will be a data frame with one column. If you want a vector of
 names or codes see \code{\link{code}} and \code{\link{name}}.
 }
 \seealso{
-Other Table functions: \code{\link{reg_table}}
+Other Table functions: 
+\code{\link{reg_table}()}
 }
 \author{
 Mark Wheldon

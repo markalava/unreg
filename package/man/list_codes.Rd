@@ -14,10 +14,12 @@ Lists the unique codes in \code{unloc_df$code}. \code{unloc_df} is
 from the \pkg{wpp2019} package.
 }
 \seealso{
-Other listing functions: \code{\link{list_country_codes}},
-  \code{\link{list_country_names}},
-  \code{\link{list_names}}, \code{\link{list_reg_codes}},
-  \code{\link{list_reg_names}}
+Other listing functions: 
+\code{\link{list_country_codes}()},
+\code{\link{list_country_names}()},
+\code{\link{list_names}()},
+\code{\link{list_reg_codes}()},
+\code{\link{list_reg_names}()}
 }
 \author{
 Mark Wheldon

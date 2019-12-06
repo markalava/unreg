@@ -27,9 +27,12 @@ name(900)
 
 }
 \seealso{
-Other translator functions: \code{\link{code}},
-  \code{\link{country_codes}}, \code{\link{country_names}},
-  \code{\link{reg_code}}, \code{\link{reg_name}}
+Other translator functions: 
+\code{\link{code}()},
+\code{\link{country_codes}()},
+\code{\link{country_names}()},
+\code{\link{reg_code}()},
+\code{\link{reg_name}()}
 }
 \author{
 Mark Wheldon

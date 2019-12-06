@@ -4,9 +4,13 @@
 \alias{reg_table}
 \title{Create table of countries and regions}
 \usage{
-reg_table(level = c("", "1", "2"), family = c("M49", "SDG", "WB_inc",
-  "Dev"), include_codes = TRUE, include_names = TRUE,
-  stringsAsFactors = FALSE)
+reg_table(
+  level = c("", "1", "2"),
+  family = c("M49", "SDG", "WB_inc", "Dev"),
+  include_codes = TRUE,
+  include_names = TRUE,
+  stringsAsFactors = FALSE
+)
 }
 \arguments{
 \item{level}{Level of region. Higher levels are nested in lower
@@ -45,7 +49,8 @@ reg_table(level = 1, family = M49)
 
 }
 \seealso{
-Other Table functions: \code{\link{country_table}}
+Other Table functions: 
+\code{\link{country_table}()}
 }
 \author{
 Mark Wheldon

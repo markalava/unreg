@@ -3,7 +3,6 @@
 \docType{package}
 \name{unreg}
 \alias{unreg}
-\alias{unreg-package}
 \title{unreg: Utilities for accessing country ISO codes and UN geographic regions}
 \description{
 unreg: Utilities for accessing country ISO codes and UN geographic regions

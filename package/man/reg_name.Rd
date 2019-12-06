@@ -4,8 +4,7 @@
 \alias{reg_name}
 \title{Region name associated with a country or region}
 \usage{
-reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WB_inc",
-  "Dev"))
+reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WB_inc", "Dev"))
 }
 \arguments{
 \item{x}{\emph{Country} identifier. Interpreted as \dQuote{code}
@@ -41,9 +40,12 @@ reg_name("France", 2, family = "SDG")
 
 }
 \seealso{
-Other translator functions: \code{\link{code}},
-  \code{\link{country_codes}}, \code{\link{country_names}},
-  \code{\link{name}}, \code{\link{reg_code}}
+Other translator functions: 
+\code{\link{code}()},
+\code{\link{country_codes}()},
+\code{\link{country_names}()},
+\code{\link{name}},
+\code{\link{reg_code}()}
 }
 \author{
 Mark Wheldon
