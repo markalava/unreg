@@ -8,7 +8,7 @@ invalid_codes <- function(x) {
     if(any(!is.na(x))) {
         not_val_x <- rep(FALSE, length(x))
         not_val_x[!is.na(x)] <- !(x[!is.na(x)] %in% unloc_df$country_code)
-        if(any(not_val_x)) warning("The following are not valid codes and will be replaced with 'NA': ",
+        if(any(not_val_x)) warning("The following are not valid codes and will be treated as 'NA': ",
                                    paste(x[not_val_x], collapse = ", "))
         not_val_x
     } else FALSE
@@ -21,7 +21,7 @@ invalid_names <- function(x, clean = TRUE) {
         not_val_x <- rep(FALSE, length(x))
         if(clean) x[!is.na(x)] <- tolower(name_subs(x[!is.na(x)]))
         not_val_x[!is.na(x)] <- !(x[!is.na(x)] %in% tolower(unloc_df$name))
-        if(any(not_val_x)) warning("The following are not valid names and will be replaced with 'NA': ",
+        if(any(not_val_x)) warning("The following are not valid names and will be treated as 'NA': ",
                                    paste(x[not_val_x], collapse = ", "))
         not_val_x
     } else FALSE
@@ -33,7 +33,7 @@ invalid_country_codes <- function(x) {
     if(any(!is.na(x))) {
         not_val_x <- rep(FALSE, length(x))
         not_val_x[!is.na(x)] <- !(x[!is.na(x)] %in% list_country_codes())
-        if(any(not_val_x)) warning("The following are not valid country codes and will be replaced with 'NA': ",
+        if(any(not_val_x)) warning("The following are not valid country codes and will be treated as 'NA': ",
                                    paste(x[not_val_x], collapse = ", "))
         not_val_x
     } else FALSE
@@ -49,7 +49,7 @@ invalid_reg_codes <- function(x, family) {
                                    list_reg_codes(level = 2, family = family))))
         if(any(not_val_x)) warning("The following are not valid region codes in family '",
                                    family,
-                                   "'and will be replaced with 'NA': ",
+                                   "'and will be treated as 'NA': ",
                                    paste(x[not_val_x], collapse = ", "))
         not_val_x
     } else FALSE
