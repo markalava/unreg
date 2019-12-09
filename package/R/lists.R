@@ -92,25 +92,16 @@ list_reg_codes <- function(level = c("1", "2", "other"),
                                               "country_code"])))
         } else(stop("level = '", level, "' not valid."))
 
-    } else if(identical(family, "SDG")) {
-        if(identical(level, "1")) {
-            return(as.numeric(internal_sdg_reg_L1_country_codes))
-        } else if(identical(level, "2")) {
-            return(as.numeric(internal_sdg_reg_L2_country_codes))
-        } else if(identical(tolower(level), "other")) {
-            return(as.numeric(internal_sdg_reg_Lother_country_codes))
-        } else(stop("level = '", level, "' not valid."))
-
-    } else if(identical(family, "WB_inc")) {
-        if(identical(level, "1")) {
-            return(as.numeric(internal_wb_inc_reg_L1_country_codes))
-        } else(stop("level = '", level, "' not valid."))
-
-    } else if(identical(family, "Dev")) {
-        if(identical(level, "1")) {
-            return(internal_dev_reg_L1_country_codes)
-        } else(stop("level = '", level, "' not valid."))
-    } else stop("family = '", family, "' not implemented.")
+    } else {
+        internal_reg_country_codes <-
+            make_agcode_var_name(family = family, level = level)
+        if(!exists(internal_reg_country_codes)) {
+            stop("The combination family = '", family, "' and level = '",
+                 level, "' does not exist.")
+        } else {
+            internal_reg_country_codes <- get(internal_reg_country_codes)
+        }
+    }
 }
 
 
