@@ -9,10 +9,10 @@
 ## regions. They are the codes of the sdg regions themselves. In
 ## UNlocations, these are in the column called 'country_regions'.
 
-## NOTE 2: SDG 'subregions' 'Europe' and 'Northern America' are not set
-## up as their own level (then there would be 3 sdg levels). Instead,
-## 'Europe' is not included and 'Northern America' is set as a level 2
-## region.
+## NOTE 2: SDG 'subregions' 'Europe' and 'Northern America' are not
+## set up as their own level (then there would be 3 sdg
+## levels). Instead, 'Europe' is included in level 'OTHER' and
+## 'Northern America' is set as a level 2 region.
 
 internal_sdg_reg_L1_country_codes <-
     c(947,                      #Sub Saharan Africa
@@ -53,14 +53,16 @@ internal_sdg_reg_L2_country_codes <-
 
 internal_sdg_reg_L2_ag_cols <- paste0("agcode_", internal_sdg_reg_L2_country_codes, "000")
 
-internal_sdg_reg_OTHER_country_codes <-
+internal_sdg_reg_Lother_country_codes <-
     c(917                       #Europe
       )
 
-internal_sdg_reg_OTHER_ag_cols <- paste0("agcode_", internal_sdg_reg_OTHER_country_codes, "000")
+internal_sdg_reg_Lother_ag_cols <- paste0("agcode_", internal_sdg_reg_Lother_country_codes, "000")
 
 ###-----------------------------------------------------------------------------
 ### * 'country_codes' of the rows containing WB regions
+
+## Need to have 'OTHER' because when making tables can only have one region code per country.
 
 internal_wb_inc_reg_L1_country_codes <-
     c(1503,                     #high income
@@ -72,11 +74,11 @@ internal_wb_inc_reg_L1_country_codes <-
 
 internal_wb_inc_reg_L1_ag_cols <- paste0("agcode_", internal_wb_inc_reg_L1_country_codes, "000")
 
-internal_wb_inc_reg_OTHER_country_codes <-
+internal_wb_inc_reg_Lother_country_codes <-
     c(1517                     #middle income
       )
 
-internal_wb_inc_reg_OTHER_ag_cols <- paste0("agcode_", internal_wb_inc_reg_OTHER_country_codes, "000")
+internal_wb_inc_reg_Lother_ag_cols <- paste0("agcode_", internal_wb_inc_reg_Lother_country_codes, "000")
 
 ###-----------------------------------------------------------------------------
 ### * 'country_codes' of the rows containing Dev regions
@@ -100,9 +102,9 @@ internal_dev_reg_L2_ag_cols <- paste0("agcode_", internal_dev_reg_L2_country_cod
 
 usethis::use_data(internal_sdg_reg_L1_country_codes, internal_sdg_reg_L1_ag_cols,
                   internal_sdg_reg_L2_country_codes, internal_sdg_reg_L2_ag_cols,
-                  internal_sdg_reg_OTHER_country_codes, internal_sdg_reg_OTHER_ag_cols,
+                  internal_sdg_reg_Lother_country_codes, internal_sdg_reg_Lother_ag_cols,
                   internal_wb_inc_reg_L1_country_codes, internal_wb_inc_reg_L1_ag_cols,
-                  internal_wb_inc_reg_OTHER_country_codes, internal_wb_inc_reg_OTHER_ag_cols,
+                  internal_wb_inc_reg_Lother_country_codes, internal_wb_inc_reg_Lother_ag_cols,
                   internal_dev_reg_L1_country_codes, internal_dev_reg_L1_ag_cols,
                   internal_dev_reg_L2_country_codes,internal_dev_reg_L2_ag_cols,
                   internal = TRUE, overwrite = TRUE)

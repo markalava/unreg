@@ -143,10 +143,13 @@ name <- function(code) {
 ##'     \code{is.character(x)}.
 ##' @param family Family to which the region referenced by \code{code}
 ##'     belongs.
-##' @param level Level of region. Higher levels are nested in
-##'     lower levels. E.g., \dQuote{Africa} is level \dQuote{1},
+##' @param level Level of region. Higher levels are nested in lower
+##'     levels. E.g., \dQuote{Africa} is level \dQuote{1},
 ##'     \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
-##'     character if supplied as numeric.
+##'     character if supplied as numeric. Level \dQuote{other} is for
+##'     regions that are not part of an official classification, such
+##'     as \dQuote{Europe} in the \dQuote{SDG} family and
+##'     \dQuote{middle income} in the \dQuote{WB_inc} family.
 ##' @return A vector the same length as \code{x} containing the
 ##'     code(s) as numeric.
 ##' @author Mark Wheldon
@@ -164,7 +167,7 @@ name <- function(code) {
 ##' reg_code(250, 2, family = "SDG")
 ##'
 ##' @export
-reg_code <- function(x, level = c("1","2"),
+reg_code <- function(x, level = c("1","2", "other"),
                      family = c("M49", "SDG", "WB_inc", "Dev"),
                      verbose = FALSE) {
 
@@ -218,7 +221,14 @@ reg_code <- function(x, level = c("1","2"),
     } else if(family %in% c("SDG", "WB_inc", "Dev")) {
 
         internal_reg_country_codes <-
-            get(make_agcode_var_name(family = family, level = level))
+            make_agcode_var_name(family = family, level = level)
+        if(!exists(internal_reg_country_codes)) {
+            stop("The combination family = '", family, "' and level = '",
+                 level, "' does not exist.")
+        } else {
+            internal_reg_country_codes <- get(internal_reg_country_codes)
+        }
+
         agcode_col_names <-
             make_agcode_col_names(internal_reg_country_codes)
 
@@ -261,7 +271,7 @@ reg_code <- function(x, level = c("1","2"),
 ##' reg_name("France", 2, family = "SDG")
 ##'
 ##' @export
-reg_name <- function(x, level = c("1","2"),
+reg_name <- function(x, level = c("1","2", "other"),
                    family = c("M49", "SDG", "WB_inc", "Dev")) {
     name(reg_code(x, family = family, level = level))
 }

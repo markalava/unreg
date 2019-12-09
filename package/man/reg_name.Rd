@@ -4,17 +4,24 @@
 \alias{reg_name}
 \title{Region name associated with a country or region}
 \usage{
-reg_name(x, level = c("1", "2"), family = c("M49", "SDG", "WB_inc", "Dev"))
+reg_name(
+  x,
+  level = c("1", "2", "other"),
+  family = c("M49", "SDG", "WB_inc", "Dev")
+)
 }
 \arguments{
 \item{x}{\emph{Country} identifier. Interpreted as \dQuote{code}
 if \code{is.numeric(x)} and \dQuote{name} if
 \code{is.character(x)}.}
 
-\item{level}{Level of region. Higher levels are nested in
-lower levels. E.g., \dQuote{Africa} is level \dQuote{1},
+\item{level}{Level of region. Higher levels are nested in lower
+levels. E.g., \dQuote{Africa} is level \dQuote{1},
 \dQuote{Eastern Africa} is level \dQuote{2}. Converted to
-character if supplied as numeric.}
+character if supplied as numeric. Level \dQuote{other} is for
+regions that are not part of an official classification, such
+as \dQuote{Europe} in the \dQuote{SDG} family and
+\dQuote{middle income} in the \dQuote{WB_inc} family.}
 
 \item{family}{Family to which the region referenced by \code{code}
 belongs.}

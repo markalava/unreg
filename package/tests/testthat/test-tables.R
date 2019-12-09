@@ -1,4 +1,4 @@
-## context("Test table functions")
+context("Test table functions")
 
 test_that("table functions return tables of the correct dimension", {
     ## country_table
@@ -10,7 +10,7 @@ test_that("table functions return tables of the correct dimension", {
                  c(nrow(unloc_df[unloc_df$location_type == 4,]), 1))
 
     ## reg_table
-    expect_error(dim(reg_table(family = "WB_inc", level = 2)),
+    expect_error(reg_table(family = "WB_inc", level = 2),
                  "No regions for this 'level' and 'family' combination.")
     expect_equal(dim(reg_table(level = 1, family = c("M49", "SDG", "WB_inc", "Dev"))),
                  c(nrow(unloc_df[unloc_df$location_type == 4,]), 10))

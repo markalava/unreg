@@ -73,7 +73,7 @@ list_country_codes <- function() {
 ##' @author Mark Wheldon
 ##' @family listing functions
 ##' @export
-list_reg_codes <- function(level = c("1", "2"),
+list_reg_codes <- function(level = c("1", "2", "other"),
                            family = c("M49", "SDG", "WB_inc", "Dev")) {
 
     ## TODO: Allow level to be 1:2?
@@ -90,13 +90,26 @@ list_reg_codes <- function(level = c("1", "2"),
         } else if(identical(level, "2")) {
             return(unique(as.numeric(unloc_df[unloc_df$location_type == 3,
                                               "country_code"])))
-        }
+        } else(stop("level = '", level, "' not valid."))
+
     } else if(identical(family, "SDG")) {
         if(identical(level, "1")) {
             return(as.numeric(internal_sdg_reg_L1_country_codes))
         } else if(identical(level, "2")) {
             return(as.numeric(internal_sdg_reg_L2_country_codes))
-        }
+        } else if(identical(tolower(level), "other")) {
+            return(as.numeric(internal_sdg_reg_Lother_country_codes))
+        } else(stop("level = '", level, "' not valid."))
+
+    } else if(identical(family, "WB_inc")) {
+        if(identical(level, "1")) {
+            return(as.numeric(internal_wb_inc_reg_L1_country_codes))
+        } else(stop("level = '", level, "' not valid."))
+
+    } else if(identical(family, "Dev")) {
+        if(identical(level, "1")) {
+            return(internal_dev_reg_L1_country_codes)
+        } else(stop("level = '", level, "' not valid."))
     } else stop("family = '", family, "' not implemented.")
 }
 
@@ -110,7 +123,7 @@ list_reg_codes <- function(level = c("1", "2"),
 ##' @author Mark Wheldon
 ##' @family listing functions
 ##' @export
-list_reg_names <- function(level = c("1", "2"),
+list_reg_names <- function(level = c("1", "2", "other"),
                            family = c("M49", "SDG", "WB_inc", "Dev")) {
 
     family <- match.arg(family)
@@ -118,19 +131,5 @@ list_reg_names <- function(level = c("1", "2"),
     level <- as.character(level)
     level <- match.arg(level)
 
-    if(identical(family, "M49")) {
-        if(identical(level, "1")) {
-            return(unique(as.character(unloc_df[unloc_df$location_type == 2,
-                                              "name"])))
-        } else if(identical(level, "2")) {
-            return(unique(as.character(unloc_df[unloc_df$location_type == 3,
-                                              "name"])))
-        }
-    } else if(identical(family, "SDG")) {
-        if(identical(level, "1")) {
-            return(as.character(name(internal_sdg_reg_L1_country_codes)))
-        } else if(identical(level, "2")) {
-            return(as.character(name(internal_sdg_reg_L2_country_codes)))
-        }
-    } else stop("family = '", family, "' not implemented.")
+    name(list_reg_codes(level = level, family = family))
 }

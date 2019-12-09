@@ -57,3 +57,8 @@ test_that("'reg_name' returns correct answer in random cases", {
     expect_equal(suppressWarnings(reg_name(c(NA, "blip", "Afghanistan", NA, "Canada", "foo"), 2, family = "SDG")),
                  c(NA, NA, "Southern Asia", NA, "Northern America", NA))
 })
+
+test_that("level 'other' is working properly", {
+    expect_equal(reg_name("France", family = "SDG", level = "other"), "Europe")
+    expect_equal(reg_name("Ghana", family = "WB_inc", level = "other"), "Middle-income countries")
+})
