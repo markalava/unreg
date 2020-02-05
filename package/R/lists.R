@@ -157,8 +157,10 @@ list_reg_colours <- function(family = c("M49", "SDG", "WB_Inc", "Dev"),
         make_colour_code_var_name(family = family, model = model)
     col_var_name_world <-
         paste0("internal_world_colour_", model)
-    if(add_world) return(c(get(col_var_name), get(col_var_name_world)))
-    else return(get(col_var_name))
+    if(add_world) out <- c(get(col_var_name), get(col_var_name_world))
+    else out <- get(col_var_name)
+    if(use_reg_names) names(out) <- name(names(out))
+    return(out)
 }
 
 ##' @rdname list_reg_colours
