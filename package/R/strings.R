@@ -37,3 +37,26 @@ make_agcode_col_names <- function(agcodes) {
     paste0("agcode_", agcodes, "000")
 }
 
+###
+### SDG region name variants
+###
+
+##' SDG region name variants
+##'
+##' Substitutes SDG region names for a variant.
+##'
+##' This currently concerns only \dQuote{Australia/New Zealand} and
+##' \dQuote{Oceania}.
+##'
+##' @param x Character vector containing names to substitute.
+##' @return Character vector after substitution.
+##' @author Mark Wheldon
+##' @export
+sub_sdg_names <- function(x) {
+    nm <- names(internal_sdg_name_variants)
+    for(n in 1:length(nm)) {
+        x[x == nm[n]] <- internal_sdg_name_variants[n]
+    }
+    return(x)
+    }
+

@@ -79,6 +79,10 @@ clean_sha1_DESC <- function(pkg_dir) {
 
 ### Make sysdata.rda
 divider("MAKING SYSDATA")
+## Must actually 'execute' the internal data
+for (nm in list.files("data-raw", pattern = "[.][RrSsQq]$")) {
+    stopifnot(any(grepl("^[^#]*usethis::use_data", readLines(file.path("data-raw", nm)))))
+}
 sourceDir("data-raw")
 
 ### Document
@@ -92,5 +96,5 @@ devtools::test(reporter = c("summary", "fail"))
 ### Install
 divider("INSTALLING")
 write_sha1_DESC(pkg_dir = ".", git_dir = "..")
-devtools::install()# devtools::install(build_vignettes = TRUE)
+devtools::install(upgrade = "never")# devtools::install(build_vignettes = TRUE,upgrade = "never")
 clean_sha1_DESC(pkg_dir = ".")

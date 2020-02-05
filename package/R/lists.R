@@ -124,3 +124,26 @@ list_reg_names <- function(level = c("1", "2", "other"),
 
     name(list_reg_codes(level = level, family = family))
 }
+
+
+##' List SDG region colours
+##'
+##' List hex or RGB codes for the official colours to be used for plotting SDG regions.
+##'
+##' @param model Colour model (only 'hex' and 'rgb' are supported).
+##' @return Character vector or list of SDG colours
+##' @author Mark Wheldon
+##' @examples
+##' list_sdg_colours("hex")
+##' @family listing functions
+##' @export
+list_sdg_colours <- function(model = c("hex", "rgb")) {
+    model <- match.arg(model)
+    if(identical(model, "hex")) return(internal_sdg_colours_hex)
+    else if(identical(model, "rgb")) return(internal_sdg_colours_rgb)
+    }
+
+##' @rdname list_sdg_colours
+##' @examples list_sdg_colors("hex")
+##' @export
+list_sdg_colors <- list_sdg_colours

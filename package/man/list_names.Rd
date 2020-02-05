@@ -28,7 +28,8 @@ Other listing functions:
 \code{\link{list_country_codes}()},
 \code{\link{list_country_names}()},
 \code{\link{list_reg_codes}()},
-\code{\link{list_reg_names}()}
+\code{\link{list_reg_names}()},
+\code{\link{list_sdg_colours}()}
 }
 \author{
 Mark Wheldon
