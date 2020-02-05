@@ -126,24 +126,45 @@ list_reg_names <- function(level = c("1", "2", "other"),
 }
 
 
-##' List SDG region colours
+##' List region colours
 ##'
-##' List hex or RGB codes for the official colours to be used for plotting SDG regions.
+##' List hex or RGB codes of the official colours to be used for
+##' plotting various level 1 regions (there are no colours for level 2
+##' regions).
 ##'
-##' @param model Colour model (only 'hex' and 'rgb' are supported).
-##' @return Character vector or list of SDG colours
+##' @param family Region family for which to return colour codes.
+##' @param model Colour model (only \code{"hex"} and \code{"rgb"} are
+##'     supported).
+##' @param use_reg_names Logial. Should the names of the output object
+##'     be the names of the region? Otherwise they are the codes.
+##' @param add_world Logical. Should \dQuote{World} be added to the
+##'     output?
+##' @return Named character vector or list of region colours with
+##'     region codes as names (or region names if \code{use_reg_names}
+##'     is \code{TRUE}).
 ##' @author Mark Wheldon
 ##' @examples
-##' list_sdg_colours("hex")
+##' list_reg_colours("SDG", "hex")
 ##' @family listing functions
 ##' @export
-list_sdg_colours <- function(model = c("hex", "rgb")) {
+list_reg_colours <- function(family = c("M49", "SDG", "WB_Inc", "Dev"),
+                             model = c("hex", "rgb"),
+                             use_reg_names = FALSE,
+                             add_world = FALSE) {
+    family <- match.arg(family)
     model <- match.arg(model)
-    if(identical(model, "hex")) return(internal_sdg_colours_hex)
-    else if(identical(model, "rgb")) return(internal_sdg_colours_rgb)
-    }
+    col_var_name <-
+        make_colour_code_var_name(family = family, model = model)
+    col_var_name_world <-
+        paste0("internal_world_colour_", model)
 
-##' @rdname list_sdg_colours
-##' @examples list_sdg_colors("hex")
+    if(add_world) out <- c(get(col_var_name), get(col_var_name_world))
+    else out <- get(col_var_name)
+    if(use_reg_names) names(out) <- name(names(out))
+    return(out)
+}
+
+##' @rdname list_reg_colours
+##' @examples list_reg_colors("SDG", "hex")
 ##' @export
-list_sdg_colors <- list_sdg_colours
+list_reg_colors <- list_reg_colours

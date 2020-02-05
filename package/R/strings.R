@@ -37,6 +37,12 @@ make_agcode_col_names <- function(agcodes) {
     paste0("agcode_", agcodes, "000")
 }
 
+### Make colour code variable names
+make_colour_code_var_name <- function(family, model) {
+    paste0("internal_", tolower(family),
+           "_reg_L1_colours_", tolower(model))
+    }
+
 ###
 ### SDG region name variants
 ###
