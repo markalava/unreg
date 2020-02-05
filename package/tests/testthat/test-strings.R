@@ -1,5 +1,3 @@
-context("Test string functions")
-
 test_that("'sub_sdg_names' works", {
     expect_equal(sub_sdg_names(c("Australia/New Zealand", "World")),
                  c("Australia and New Zealand", "World"))

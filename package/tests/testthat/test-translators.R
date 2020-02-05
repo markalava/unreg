@@ -1,4 +1,3 @@
-context("Test translator functions")
 
 ## TODO: test that passing regions, invalid codes/names, return warnings and 'NA's.
 

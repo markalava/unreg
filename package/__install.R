@@ -83,6 +83,7 @@ divider("MAKING SYSDATA")
 for (nm in list.files("data-raw", pattern = "[.][RrSsQq]$")) {
     stopifnot(any(grepl("^[^#]*usethis::use_data", readLines(file.path("data-raw", nm)))))
 }
+file.remove("R/sysdata.rda")
 sourceDir("data-raw")
 
 ### Document

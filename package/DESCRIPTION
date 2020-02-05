@@ -1,7 +1,7 @@
 Package: unreg
 Type: Package
 Title: World Regions, Countries, and Codes
-Version: 0.0.2
+Version: 0.0.3
 Author: Mark Wheldon
 Maintainer: Mark Wheldon <wheldon@un.org>
 Description: Utilities for accessing country ISO codes and UN geographic
