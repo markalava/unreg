@@ -64,5 +64,25 @@ sub_sdg_names <- function(x) {
         x[x == nm[n]] <- internal_sdg_name_variants[n]
     }
     return(x)
-    }
+}
 
+##' Shorten region names
+##'
+##' Shorten region names to help with plotting, for example.
+##'
+##' @param names Character vector of names to shorten.
+##' @return Character vector of shortened region names.
+##' @author Mark Wheldon
+##' @export
+shortern_reg_names <- function(names) {
+    sapply(names, function(z) {
+        z <- gsub("excluding Australia and New Zealand",
+                  "excluding Australia and NZ", z)
+        z <- gsub("excluding", "excl.", z)
+        z <- gsub("Northern", "N.", z)
+        z <- gsub("Southern", "S.", z)
+        z <- gsub("Western", "W.", z)
+        z <- gsub("Eastern", "E.", z)
+        z <- gsub(" and ", " & ", z)
+        z
+    })}

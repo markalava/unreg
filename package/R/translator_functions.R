@@ -256,6 +256,9 @@ reg_code <- function(x, level = c("1","2", "other"),
 ##' If a region name is supplied it will just be returned.
 ##'
 ##' @inheritParams reg_code
+##' @param x \emph{Region} identifier. Interpreted as \dQuote{code}
+##'     if \code{is.numeric(x)} and \dQuote{name} if
+##'     \code{is.character(x)}.
 ##' @return Region name as character
 ##' @author Mark Wheldon
 ##' @family translator functions
@@ -282,6 +285,9 @@ reg_name <- function(x, level = c("1","2", "other"),
 ##' Returns codes of all countries in the region
 ##'
 ##' @inheritParams reg_code
+##' @param x \emph{Region} identifier. Interpreted as \dQuote{code}
+##'     if \code{is.numeric(x)} and \dQuote{name} if
+##'     \code{is.character(x)}.
 ##' @return Country codes as numeric.
 ##' @author Mark Wheldon
 ##' @family translator functions
@@ -303,7 +309,7 @@ country_codes <- function(x, family = c("M49", "SDG", "WB_inc", "Dev")) {
         code <- code(x, family = family)
     } else code <- NA
 
-    ## TO DO: VALIDATE 'x' is a region from family 'family'
+    ## TO DO: VALIDATE 'x' is a region from family 'family' -- done this for M49 below.
     ## 'NA' and non-country codes mapped to 'NA'
     na.code <- is.na(code)
     na.code <- na.code | invalid_reg_codes(code, family = family)
@@ -316,6 +322,12 @@ country_codes <- function(x, family = c("M49", "SDG", "WB_inc", "Dev")) {
         }
     }
 
+    ## RE-DO using 'reg_table()':
+    ## ----------
+    ## tbl <- reg_table(level = "", family = family, include_names = FALSE)
+    ## .. subset tbl[reg_code == x]$country_code
+
+    ## REplace this with the above version based on 'reg_table()'
     if(identical(family, "M49")) {
         unloc_df_reg <- unloc_df[unloc_df$location_type %in% 2:3,]
         unloc_df_country <- unloc_df[unloc_df$location_type == 4,]
