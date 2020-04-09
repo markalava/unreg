@@ -317,7 +317,7 @@ country_codes <- function(x, family = c("M49", "SDG", "WB_inc", "Dev")) {
         out <- numeric(length(code))
         out[na.code] <- NA
         if(length(out[!na.code]) > 0) {
-            out[!na.code] <- country_codes(code[!na.code], level = level, family = family)
+            out[!na.code] <- country_codes(code[!na.code], family = family)
             return(out)
         }
     }
