@@ -2,3 +2,4 @@
 ^data-raw$
 ^__install\.*$
 ^Rterm\.exe*$
+.*\.DS_Store$
