@@ -96,6 +96,6 @@ devtools::test(reporter = c("summary", "fail"))
 
 ### Install
 divider("INSTALLING")
-write_sha1_DESC(pkg_dir = ".", git_dir = "..")
+write_sha1_DESC(pkg_dir = ".", git_dir = ".")
 devtools::install(upgrade = "never")# devtools::install(build_vignettes = TRUE,upgrade = "never")
 clean_sha1_DESC(pkg_dir = ".")
