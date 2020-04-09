@@ -1,0 +1,4 @@
+^Meta$
+^data-raw$
+^__install\.*$
+^Rterm\.exe*$

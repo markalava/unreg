@@ -1,0 +1,172 @@
+---
+title: "unreg"
+author: "Mark Wheldon"
+date: "`r Sys.Date()`"
+output:
+    function(...) rmarkdown::html_vignette(..., css=c(system.file("rmarkdown", "templates", "html_vignette", "resources", "vignette.css", package = "rmarkdown"), "vignette2.css")):
+      toc: true
+bibliography: bibliography.bib
+link-citations: true
+vignette: >
+  %\VignetteIndexEntry{unreg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+ 
+*unreg* provides convenience functions for working with country and country classification schemes, and their ISO codes [@united_nations_standard_2019]. It is based on the package [@division19_wpp2019], specifically the data set `UNlocations` in that package.
+
+
+# Motivation
+
+Many demographic indicators are presented by country and geographic region. Regions are sets (or aggregates) of countries defined in a particular classification scheme, or 'region family'. Region families in common use are the *M49* [@united_nations_standard_2019] and *World Bank* Income Group families [@bank19_world_bank_count_lendin_group]. 
+
+Mappings between countries and regions used by the *World Population Prospects* [@united_nations_world_2019] are given in the `UNlocations` data frame in the *wpp2019* package [@division19_wpp2019]. However, this file is quite complicated. In particular, the coding of many regions is done through specially named columns.
+
+```{r}
+library(wpp2019)
+data(UNlocations)
+UNlocations[1:3,1:8]
+```
+
+*unreg* provides many convenience functions that make working with the country and region names and codes much easier.
+
+
+# Region Families
+
+Region families are either hierarchical or binary. Several families of each kind are supported. 
+
+## Hierarchical Families
+
+Hierarchical familes have a completely nested structure. All hierarchical families have one or two levels.
+
+M49
+  : Two-level geographic grouping with two levels, e.g., "Africa", "Western Africa", ... . See [@united_nations_standard_2019].
+  
+SDG-Region
+  : Two-level geographic grouping with two levels, e.g., "Sub-Saharan Africa", "Western Africa", ... . These were used in a 2017 report to track progress towards the *Sustainable Development Goals* of the United Nations [@united_nations_statistics_division_sdg_2019]. Following WPP 2019 [@division19_wpp2019], *unreg* further disaggregates sub-Saharang Africa in the relevant subregions from the M49 standard.
+ 
+World Bank Income Groups
+  : One-level geographic grouping [Not yet implemented]
+  
+Legacy Development Groups
+  : [Not yet implemented, "more developed", "less developed", etc.] --- maybe might not be strictly hierarchical
+  
+  
+## Binary Families
+  
+Binary families have only partially nested structures, or no nesting. They are represented by binary indicator variables which include or exclude countries.
+  
+SDG-Other
+  : [Not yet implemented, but includes "SIDS", "LDCs", "LLDCs"]
+
+**Have to sort through this if continue with development.**
+
+
+# Package Operation
+
+## Function Groups
+
+Three groups of functions are provided, each for addressing a specific task:
+
+1. Simple listing functions
+2. Translation functions for translating between names and codes
+3. Tabulation functions for creating easy-to-read tables of countries and regions
+
+
+## Listing Functions
+
+These functions are designed to list all available country and region names and codes. Their names all begin with `list_`.
+
+```{r}
+#### List all names---countries and regions
+
+head(unreg::list_names())
+
+#### List all codes---countries and regions
+
+head(unreg::list_codes())
+```
+
+
+## Translation Functions
+
+These functions translate names (countries and regions) into their ISO codes and vice-versa. They are designed to return a vector of names or codes. Their results could be looped over, for example, or for interactive use.
+
+```{r}
+#### Translate a country/region code into a name
+unreg::name(c(250, 903))
+
+#### Go the other way
+unreg::code(c("France", "Africa"))
+
+#### All names are case insensitive
+unreg::code(c("france", "FRanCe"))
+
+#### Some regions are in two families--- specify the family
+unreg::code(c("Latin America and the Caribbean", "Europe", "Northern America"))
+unreg::code(c("Latin America and the Caribbean", "Europe", "Northern America"),
+            family = "SDG")
+unreg::code(c("Latin America and the Caribbean", "Europe", "Northern America"),
+            family = "M49")
+
+#### You can abbreviate LAC
+unreg:::code("lac", "SDG")
+```
+
+If you want to get the region a country belongs to use `unreg::reg_code()` or `unreg::reg_name()`. You can supply the country as its code or its name (case insensitive).
+
+```{r}
+#### Default family is "M49"
+unreg::reg_code(250)
+unreg::reg_code(c("France", "spAIn"))
+
+unreg::reg_code(250, family = "SDG")
+
+#### Default level is 1
+#### Give the level to get specific level of region (can be supplied as numeric for convenience)
+unreg::reg_code(250, 2, family = "SDG")
+
+#### If you want the name, instead of the code, use 'unreg::reg_name'
+unreg::reg_name("france", family = "SDG")
+unreg::reg_name(250, 2, family = "SDG")
+```
+
+To get the mappings between countries and regions, use `unreg::country_codes()` and `unreg::country_names()`.
+
+```{r}
+unreg::country_codes("Africa")
+
+unreg::country_names("Northern America")
+unreg::country_names(905)       #unreg::code("Northern America", family = "M49") is 905
+```
+
+
+## Tabulation Functions
+
+The tabulation functions are designed to return tables as *R* data frames that show countries and regions.
+
+```{r} 
+#### Level 1
+head(unreg::reg_table(level = 1, family = "M49"))
+
+#### Level 2
+head(unreg::reg_table(level = 2, family = "M49"))
+
+
+#### Both
+head(unreg::reg_table(level = 1:2, family = "M49"))
+#### (alternative)
+head(unreg::reg_table(level = "", family = "M49"))
+```
+
+
+# References {-}
+
