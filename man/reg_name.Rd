@@ -11,7 +11,7 @@ reg_name(
 )
 }
 \arguments{
-\item{x}{\emph{Region} identifier. Interpreted as \dQuote{code}
+\item{x}{\emph{Country} identifier. Interpreted as \dQuote{code}
 if \code{is.numeric(x)} and \dQuote{name} if
 \code{is.character(x)}.}
 

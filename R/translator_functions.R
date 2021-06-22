@@ -256,9 +256,6 @@ reg_code <- function(x, level = c("1","2", "other"),
 ##' If a region name is supplied it will just be returned.
 ##'
 ##' @inheritParams reg_code
-##' @param x \emph{Region} identifier. Interpreted as \dQuote{code}
-##'     if \code{is.numeric(x)} and \dQuote{name} if
-##'     \code{is.character(x)}.
 ##' @return Region name as character
 ##' @author Mark Wheldon
 ##' @family translator functions

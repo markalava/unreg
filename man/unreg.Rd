@@ -4,6 +4,3 @@
 \name{unreg}
 \alias{unreg}
 \title{unreg: Utilities for accessing country ISO codes and UN geographic regions}
-\description{
-unreg: Utilities for accessing country ISO codes and UN geographic regions
-}
