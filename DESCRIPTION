@@ -11,8 +11,7 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     wpp2019
-RoxygenNote: 7.1.1
-GitHubSHA1LastCommit: -
+RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
