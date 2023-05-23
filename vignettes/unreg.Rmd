@@ -5,6 +5,11 @@ date: "`r Sys.Date()`"
 output:
     function(...) rmarkdown::html_vignette(..., css=c(system.file("rmarkdown", "templates", "html_vignette", "resources", "vignette.css", package = "rmarkdown"), "vignette2.css")):
       toc: true
+      number_sections: true
+    pdf_document:
+      keep_tex: false
+      number_sections: true
+      pandoc_args: ["--columns=100"]
 bibliography: bibliography.bib
 link-citations: true
 vignette: >

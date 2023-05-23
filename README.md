@@ -1,4 +1,3 @@
 # unreg
-World Regions, Countries, and Codes. 
 
-Utilities for accessing country ISO codes and UN geographic regions.
+`unreg` ('UN Regions') provides easy-to-use utilities for working with country names, [M49 codes](https://unstats.un.org/unsd/methodology/m49/ "M49 codes"), and UN geographic regions.
